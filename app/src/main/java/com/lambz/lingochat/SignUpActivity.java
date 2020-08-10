@@ -19,12 +19,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 public class SignUpActivity extends AppCompatActivity
 {
     private static final long VIBRATION_DURATION = 500;
     private static final String TAG = "SignUpActivity";
-    private EditText mEmailEditText, mPasswordEditText, mConfirmPasswordEditText;
+    private EditText mEmailEditText, mPasswordEditText, mConfirmPasswordEditText, mNameEditText;
     private Animation mAnimation;
     private Vibrator mVibrator;
     private FirebaseAuth mAuth;
@@ -34,6 +35,7 @@ public class SignUpActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        mNameEditText = findViewById(R.id.name_edittext);
         mEmailEditText = findViewById(R.id.email_edittext);
         mPasswordEditText = findViewById(R.id.password_editText);
         mConfirmPasswordEditText = findViewById(R.id.cpassword_editText);
@@ -54,85 +56,108 @@ public class SignUpActivity extends AppCompatActivity
         String email = mEmailEditText.getText().toString().trim();
         String password = mPasswordEditText.getText().toString();
         String cpassword = mConfirmPasswordEditText.getText().toString();
-        if(email.isEmpty())
+        String name = mNameEditText.getText().toString();
+        if (name.isEmpty())
+        {
+            mNameEditText.setError("Name is required!");
+            mNameEditText.requestFocus();
+            shakeAndVibrate(mNameEditText);
+            return;
+        }
+        if (email.isEmpty())
         {
             mEmailEditText.setError("Email is required!");
             mEmailEditText.requestFocus();
             shakeAndVibrate(mEmailEditText);
             return;
-        }
-        else if(!Utils.validate(email))
+        } else if (!Utils.validate(email))
         {
             mEmailEditText.setError("Enter valid email address!");
             mEmailEditText.requestFocus();
             shakeAndVibrate(mEmailEditText);
             return;
-        }
-        else if(password.isEmpty())
+        } else if (password.isEmpty())
         {
             mPasswordEditText.setError("Password is required!");
             mPasswordEditText.requestFocus();
             shakeAndVibrate(mPasswordEditText);
             return;
-        }
-        else if(password.length()<6)
+        } else if (password.length() < 6)
         {
             mPasswordEditText.setError("Password must be at least 6 characters long!");
             mPasswordEditText.requestFocus();
             shakeAndVibrate(mPasswordEditText);
             return;
-        }
-        else if(cpassword.isEmpty())
+        } else if (cpassword.isEmpty())
         {
             mConfirmPasswordEditText.setError("Confirm Password is required!");
             mConfirmPasswordEditText.requestFocus();
             shakeAndVibrate(mConfirmPasswordEditText);
             return;
-        }
-        else if(cpassword.length()<6)
+        } else if (cpassword.length() < 6)
         {
             mConfirmPasswordEditText.setError("Confirm Password must be at least 6 characters long!");
             mConfirmPasswordEditText.requestFocus();
             shakeAndVibrate(mConfirmPasswordEditText);
             return;
-        }
-        else if(!password.equals(cpassword))
+        } else if (!password.equals(cpassword))
         {
             mConfirmPasswordEditText.setError("Confirm Password does not match Password!");
             mConfirmPasswordEditText.requestFocus();
             shakeAndVibrate(mConfirmPasswordEditText);
             return;
-        }
-        else
+        } else
         {
             password = Utils.sha256(password);
-            signUp(email,password);
+            signUp(email, password, name);
         }
     }
 
-    private void signUp(String email, String password)
+    private void signUp(String email, String password, final String name)
     {
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            //FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(SignUpActivity.this,MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
+                .addOnCompleteListener(this, task ->
+                {
+                    if (task.isSuccessful())
+                    {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "createUserWithEmail:success");
+                        //FirebaseUser user = mAuth.getCurrentUser();
+                        addName(task.getResult().getUser(), name);
+                        startNextActivity();
+                        //updateUI(user);
+                    } else
+                    {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                        Toast.makeText(SignUpActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                        //updateUI(null);
+                    }
 
-                        // ...
+                    // ...
+                });
+    }
+
+    private void startNextActivity()
+    {
+        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    private void addName(FirebaseUser user, String name)
+    {
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(task ->
+                {
+                    if (task.isSuccessful())
+                    {
+                        Log.d(TAG, "User profile updated.");
                     }
                 });
     }

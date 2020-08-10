@@ -14,4 +14,9 @@
     <string name="login_text"><![CDATA[Remember to get up & stretch once in a while - your friends at chat]]></string>
     <string name="forgot_password">Forgot password?</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="full_name">Full Name</string>
+    <string name="facebook_app_id">222145562436782</string>
+    <string name="fb_login_protocol_scheme">fb222145562436782</string>
+    <string name="chats">Chats</string>
+
 </resources>

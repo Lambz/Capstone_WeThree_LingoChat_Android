@@ -6,8 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class StartupActivity extends AppCompatActivity
 {
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -28,5 +33,19 @@ public class StartupActivity extends AppCompatActivity
         Intent intent = new Intent(this,LoginActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if(user != null)
+        {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }
