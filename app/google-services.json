@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "715370322131",
+    "firebase_url": "https://lingochat-6ab86.firebaseio.com",
+    "project_id": "lingochat-6ab86",
+    "storage_bucket": "lingochat-6ab86.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:715370322131:android:f40423a07197a2e18bdc26",
+        "android_client_info": {
+          "package_name": "com.lambz.lingochat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "715370322131-b3hqutmviej4csqkr8ijb5s3mbhfo3c6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAt_9isE8TUoE8gMPSTGZsiiFptz4HqSw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "715370322131-b3hqutmviej4csqkr8ijb5s3mbhfo3c6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
