@@ -1,4 +1,4 @@
-package com.lambz.lingochat;
+package com.lambz.lingo_chat;
 
 import java.security.MessageDigest;
 import java.util.regex.Matcher;

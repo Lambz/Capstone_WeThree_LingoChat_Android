@@ -1,4 +1,4 @@
-package com.lambz.lingochat;
+package com.lambz.lingo_chat;
 
 import androidx.appcompat.app.AppCompatActivity;
 

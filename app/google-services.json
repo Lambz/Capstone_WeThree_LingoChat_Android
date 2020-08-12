@@ -1,35 +1,50 @@
 {
   "project_info": {
-    "project_number": "715370322131",
-    "firebase_url": "https://lingochat-6ab86.firebaseio.com",
-    "project_id": "lingochat-6ab86",
-    "storage_bucket": "lingochat-6ab86.appspot.com"
+    "project_number": "641112902679",
+    "firebase_url": "https://lingo-chat-69737.firebaseio.com",
+    "project_id": "lingo-chat-69737",
+    "storage_bucket": "lingo-chat-69737.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:715370322131:android:f40423a07197a2e18bdc26",
+        "mobilesdk_app_id": "1:641112902679:android:9934d1ac8903a939932052",
         "android_client_info": {
-          "package_name": "com.lambz.lingochat"
+          "package_name": "com.lambz.lingo_chat"
         }
       },
       "oauth_client": [
         {
-          "client_id": "715370322131-b3hqutmviej4csqkr8ijb5s3mbhfo3c6.apps.googleusercontent.com",
+          "client_id": "641112902679-ot534c18csv098tr5v5g2dkitoiraklq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lambz.lingo_chat",
+            "certificate_hash": "76994858fa88a34c244c460ddc7651bab84c0fcc"
+          }
+        },
+        {
+          "client_id": "641112902679-2g1d1l5l6em88tgbggjvnbbm71e9mt52.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDAt_9isE8TUoE8gMPSTGZsiiFptz4HqSw"
+          "current_key": "AIzaSyB_t8NJ0CX31i44qeiH6r9D2XulgOIWdEk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "715370322131-b3hqutmviej4csqkr8ijb5s3mbhfo3c6.apps.googleusercontent.com",
+              "client_id": "641112902679-2g1d1l5l6em88tgbggjvnbbm71e9mt52.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "641112902679-igam897l3imc9bhhoo1udguhrote2kqi.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "myapps.Lingo-Chat"
+              }
             }
           ]
         }

@@ -30,75 +30,40 @@
             android:textColor="@color/textColor"
             android:textSize="32sp" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="350dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="20dp"
+            android:hint="@string/email">
 
-            <ImageView
-                android:id="@+id/email_image"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:padding="15dp"
-                android:src="@mipmap/userb"
-                android:tint="@color/textColor"
-                app:layout_constraintBottom_toBottomOf="@id/text_input_layout"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/text_input_layout" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout"
-                android:layout_width="300dp"
+            <EditText
+                android:id="@+id/email_edittext"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableStart="@mipmap/userb"
+                android:drawablePadding="5dp"
                 android:hint="@string/email"
-                app:layout_constraintLeft_toRightOf="@id/email_image"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:inputType="textEmailAddress" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/email_edittext"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/email"
-                    android:inputType="textEmailAddress" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="350dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password_text_input_layout"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:hint="@string/password">
 
-            <ImageView
-                android:id="@+id/lock_image"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:padding="15dp"
-                android:src="@mipmap/lock"
-                android:tint="@color/textColor"
-                app:layout_constraintBottom_toBottomOf="@id/password_text_input_layout"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="@id/password_text_input_layout" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/password_text_input_layout"
-                android:layout_width="300dp"
+            <EditText
+                android:id="@+id/password_editText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableStart="@mipmap/lock"
+                android:drawablePadding="5dp"
                 android:hint="@string/password"
-                app:layout_constraintLeft_toRightOf="@id/lock_image"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <EditText
-                    android:id="@+id/password_editText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/password"
-                    android:inputType="textPassword" />
-            </com.google.android.material.textfield.TextInputLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:layout_width="wrap_content"
@@ -131,15 +96,14 @@
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"
             android:layout_width="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/sign_in_button"
             android:layout_width="wrap_content"
-            android:layout_marginTop="10dp"
             android:layout_height="wrap_content"
-            android:onClick="gmailClicked" />
+            android:layout_marginTop="10dp" />
 
     </LinearLayout>
 

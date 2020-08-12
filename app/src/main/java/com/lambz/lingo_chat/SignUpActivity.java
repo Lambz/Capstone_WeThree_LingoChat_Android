@@ -1,6 +1,5 @@
-package com.lambz.lingochat;
+package com.lambz.lingo_chat;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
@@ -14,12 +13,13 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity
 {
@@ -29,6 +29,7 @@ public class SignUpActivity extends AppCompatActivity
     private Animation mAnimation;
     private Vibrator mVibrator;
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity
         mAnimation = AnimationUtils.loadAnimation(this, R.anim.shake);
         mVibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         mAuth = FirebaseAuth.getInstance();
+        mDatabaseReference = FirebaseDatabase.getInstance().getReference();
     }
 
     public void signInClicked(View view)
@@ -123,8 +125,10 @@ public class SignUpActivity extends AppCompatActivity
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "createUserWithEmail:success");
                         //FirebaseUser user = mAuth.getCurrentUser();
-                        addName(task.getResult().getUser(), name);
-                        startNextActivity();
+                        String current_user_id = mAuth.getCurrentUser().getUid();
+                        mDatabaseReference.child("Users").child(current_user_id).setValue("");
+                        addName(task.getResult().getUser(), name,email);
+                        sendUserToMainActivity();
                         //updateUI(user);
                     } else
                     {
@@ -139,14 +143,14 @@ public class SignUpActivity extends AppCompatActivity
                 });
     }
 
-    private void startNextActivity()
+    private void sendUserToMainActivity()
     {
-        Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+        Intent intent = new Intent(SignUpActivity.this,MainActivity.class);
         startActivity(intent);
         finish();
     }
 
-    private void addName(FirebaseUser user, String name)
+    private void addName(FirebaseUser user, String name, String email)
     {
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
@@ -160,11 +164,20 @@ public class SignUpActivity extends AppCompatActivity
                         Log.d(TAG, "User profile updated.");
                     }
                 });
+        addUserInfo(name,email);
     }
 
     private void shakeAndVibrate(EditText editText)
     {
         mVibrator.vibrate(VIBRATION_DURATION);
         editText.startAnimation(mAnimation);
+    }
+
+    private void addUserInfo(String name, String email)
+    {
+        HashMap<String, String > profile_data = new HashMap<String,String>();
+        profile_data.put("name", name);
+        profile_data.put("email", email);
+        mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(profile_data);
     }
 }
