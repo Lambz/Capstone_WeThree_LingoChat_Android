@@ -14,12 +14,14 @@ import android.widget.Spinner;
 import androidx.annotation.NonNull;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import segmented_control.widget.custom.android.com.segmentedcontrol.SegmentedControl;
 
 public class GetStartedDialog extends Dialog
 {
     private CircleImageView mUserImageView;
     private Button mSaveButton;
-    private Spinner mLanguageSpinner;
+    private SegmentedControl mSegmentedControl;
+//    private Spinner mLanguageSpinner;
 
     public GetStartedDialog(@NonNull Context context)
     {
@@ -33,27 +35,28 @@ public class GetStartedDialog extends Dialog
         window.setGravity(Gravity.CENTER);
         mUserImageView = findViewById(R.id.user_imageview);
         mSaveButton = findViewById(R.id.save_btn);
-        mLanguageSpinner = findViewById(R.id.language_spinner);
+//        mLanguageSpinner = findViewById(R.id.language_spinner);
+        mSegmentedControl = findViewById(R.id.segmented_control);
+        mSegmentedControl.setSelectedSegment(0);
     }
 
-    public CircleImageView getmUserImageView()
+    public CircleImageView getUserImageView()
     {
         return mUserImageView;
     }
 
-    public Button getmSaveButton()
+    public Button getSaveButton()
     {
         return mSaveButton;
     }
 
     public int getLanguageSelection()
     {
-        return mLanguageSpinner.getSelectedItemPosition();
+        return mSegmentedControl.getLastSelectedAbsolutePosition();
     }
 
     public void setImageBitmap(Bitmap image)
     {
-        System.out.println("setting");
         mUserImageView.setImageBitmap(image);
     }
 }

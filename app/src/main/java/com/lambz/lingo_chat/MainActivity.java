@@ -73,13 +73,13 @@ public class MainActivity extends AppCompatActivity
     {
         mDialog = new GetStartedDialog(this);
         mDialog.show();
-        mDialog.getmSaveButton().setOnClickListener(view ->
+        mDialog.getSaveButton().setOnClickListener(view ->
         {
             saveInfo(mSelectedImage, mDialog.getLanguageSelection());
             mDialog.dismiss();
         });
 
-        mDialog.getmUserImageView().setOnClickListener(view ->
+        mDialog.getUserImageView().setOnClickListener(view ->
         {
             String[] arr = {"Camera", "Gallery"};
             AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
@@ -155,7 +155,6 @@ public class MainActivity extends AppCompatActivity
         } else
         {
             openCamera();
-            //dispatchTakePictureIntent();
         }
     }
 
