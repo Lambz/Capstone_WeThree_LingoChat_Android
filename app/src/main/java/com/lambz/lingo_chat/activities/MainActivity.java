@@ -1,10 +1,12 @@
-package com.lambz.lingo_chat;
+package com.lambz.lingo_chat.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -15,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,6 +31,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.lambz.lingo_chat.GetStartedDialog;
+import com.lambz.lingo_chat.R;
+import com.lambz.lingo_chat.Utils;
+import com.lambz.lingo_chat.models.Contact;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -40,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     private static final int CAMERA_REQUEST_CODE = 152;
     private static final int GALLERY_REQUEST_CODE = 2404;
     private static final String TAG = "MainActivity";
+    private static final int NEW_MESSAGE_REQUEST_CODE = 1010;
     private GetStartedDialog mDialog;
     private Bitmap mSelectedImage;
     private FirebaseAuth mAuth;
@@ -47,6 +55,7 @@ public class MainActivity extends AppCompatActivity
     private FirebaseUser mCurrentUser;
     private StorageReference mStorageReference;
     private HashMap<String, String> mUserInfo;
+    private RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -54,19 +63,25 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
+        setMemberVariables();
+    }
+
+    private void setMemberVariables()
+    {
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getUid());
         mDatabaseReference.addValueEventListener(mValueEventListener);
         mStorageReference = FirebaseStorage.getInstance().getReference().child("Profile Images");
         mUserInfo = new HashMap<>();
+        mRecyclerView = findViewById(R.id.recyclerview);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
     }
 
     public void newMessageClicked(View view)
     {
         Intent intent = new Intent(this, ContactsActivity.class);
-        startActivity(intent);
-        finish();
+        startActivityForResult(intent, NEW_MESSAGE_REQUEST_CODE);
     }
 
     private void showGetStartedDialog()
@@ -131,17 +146,17 @@ public class MainActivity extends AppCompatActivity
         byte[] data = baos.toByteArray();
         filePath.putBytes(data).continueWithTask(task ->
         {
-            if(!task.isSuccessful())
+            if (!task.isSuccessful())
             {
                 throw task.getException();
             }
             return filePath.getDownloadUrl();
         }).addOnCompleteListener(task ->
         {
-            if(task.isSuccessful())
+            if (task.isSuccessful())
             {
                 Uri download_uri = task.getResult();
-                mUserInfo.put("image",download_uri.toString());
+                mUserInfo.put("image", download_uri.toString());
                 mDatabaseReference.setValue(mUserInfo);
             }
         });
@@ -192,8 +207,7 @@ public class MainActivity extends AppCompatActivity
                 mSelectedImage = bitmap;
                 mDialog.setImageBitmap(mSelectedImage);
             }
-        }
-        if (requestCode == GALLERY_REQUEST_CODE)
+        } else if (requestCode == GALLERY_REQUEST_CODE)
         {
             if (resultCode == RESULT_OK && data != null && data.getData() != null)
             {
@@ -201,6 +215,17 @@ public class MainActivity extends AppCompatActivity
                 Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
                 mSelectedImage = bitmap;
                 mDialog.setImageBitmap(mSelectedImage);
+            }
+        } else if (requestCode == NEW_MESSAGE_REQUEST_CODE)
+        {
+            System.out.println(resultCode);
+            if (resultCode == RESULT_OK && data != null)
+            {
+                Contact contact = (Contact) data.getSerializableExtra("contact");
+                Intent intent = new Intent(MainActivity.this,ChatActivity.class);
+                intent.putExtra("contact",contact);
+                startActivity(intent);
+                Log.v(TAG, "onActivityResult: name: " + contact.getName());
             }
         }
     }
@@ -229,6 +254,7 @@ public class MainActivity extends AppCompatActivity
             {
                 showGetStartedDialog();
             }
+            Utils.setUserData(mUserInfo);
         }
 
         @Override
@@ -239,4 +265,9 @@ public class MainActivity extends AppCompatActivity
     };
 
 
+    public void settingsClicked(View view)
+    {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
 }

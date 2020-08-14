@@ -1,4 +1,4 @@
-package com.lambz.lingo_chat;
+package com.lambz.lingo_chat.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.lambz.lingo_chat.R;
+import com.lambz.lingo_chat.Utils;
 
 import java.util.HashMap;
 
@@ -61,50 +63,50 @@ public class SignUpActivity extends AppCompatActivity
         String name = mNameEditText.getText().toString();
         if (name.isEmpty())
         {
-            mNameEditText.setError("Name is required!");
+            mNameEditText.setError(getString(R.string.name_required_error));
             mNameEditText.requestFocus();
             shakeAndVibrate(mNameEditText);
             return;
         }
         if (email.isEmpty())
         {
-            mEmailEditText.setError("Email is required!");
+            mEmailEditText.setError(getString(R.string.email_required_error));
             mEmailEditText.requestFocus();
             shakeAndVibrate(mEmailEditText);
             return;
         } else if (!Utils.validate(email))
         {
-            mEmailEditText.setError("Enter valid email address!");
+            mEmailEditText.setError(getString(R.string.invalid_email_error));
             mEmailEditText.requestFocus();
             shakeAndVibrate(mEmailEditText);
             return;
         } else if (password.isEmpty())
         {
-            mPasswordEditText.setError("Password is required!");
+            mPasswordEditText.setError(getString(R.string.password_error));
             mPasswordEditText.requestFocus();
             shakeAndVibrate(mPasswordEditText);
             return;
-        } else if (password.length() < 6)
+        } else if (password.length() < 8)
         {
-            mPasswordEditText.setError("Password must be at least 6 characters long!");
+            mPasswordEditText.setError(getString(R.string.short_password_error));
             mPasswordEditText.requestFocus();
             shakeAndVibrate(mPasswordEditText);
             return;
         } else if (cpassword.isEmpty())
         {
-            mConfirmPasswordEditText.setError("Confirm Password is required!");
+            mConfirmPasswordEditText.setError(getString(R.string.cpassword_error));
             mConfirmPasswordEditText.requestFocus();
             shakeAndVibrate(mConfirmPasswordEditText);
             return;
-        } else if (cpassword.length() < 6)
+        } else if (cpassword.length() < 8)
         {
-            mConfirmPasswordEditText.setError("Confirm Password must be at least 6 characters long!");
+            mConfirmPasswordEditText.setError(getString(R.string.short_cpassword_error));
             mConfirmPasswordEditText.requestFocus();
             shakeAndVibrate(mConfirmPasswordEditText);
             return;
         } else if (!password.equals(cpassword))
         {
-            mConfirmPasswordEditText.setError("Confirm Password does not match Password!");
+            mConfirmPasswordEditText.setError(getString(R.string.password_mismatch_error));
             mConfirmPasswordEditText.requestFocus();
             shakeAndVibrate(mConfirmPasswordEditText);
             return;

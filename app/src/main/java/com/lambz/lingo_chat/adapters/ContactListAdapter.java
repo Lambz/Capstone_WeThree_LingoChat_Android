@@ -1,4 +1,4 @@
-package com.lambz.lingo_chat;
+package com.lambz.lingo_chat.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,17 +11,24 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.lambz.lingo_chat.interfaces.ContactClickedInterface;
+import com.lambz.lingo_chat.models.Contact;
+import com.lambz.lingo_chat.R;
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ViewHolder>
 {
     private List<Contact> mContactList;
     private Context mContext;
+    private ContactClickedInterface mContactClickedInterface;
 
-    public ContactListAdapter(List<Contact> mContactList, Context mContext)
+    public ContactListAdapter(List<Contact> contactList, Context context, ContactClickedInterface contactClickedInterface)
     {
-        this.mContactList = mContactList;
-        this.mContext = mContext;
+        this.mContactList = contactList;
+        this.mContext = context;
+        this.mContactClickedInterface = contactClickedInterface;
     }
 
     @NonNull
@@ -37,12 +44,19 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
-
+        Contact contact = mContactList.get(position);
+        Picasso.get().load(contact.getImage()).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(holder.mUserImageView);
+        holder.mUserNameTextView.setText(contact.getName());
+        holder.mMainLayout.setOnClickListener(view -> mContactClickedInterface.contactClicked(contact));
     }
 
     @Override
     public int getItemCount()
     {
+        if(mContactList == null)
+        {
+            return 0;
+        }
         return mContactList.size();
     }
 

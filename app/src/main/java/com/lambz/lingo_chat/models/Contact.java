@@ -1,6 +1,8 @@
-package com.lambz.lingo_chat;
+package com.lambz.lingo_chat.models;
 
-public class Contact
+import java.io.Serializable;
+
+public class Contact implements Serializable
 {
     String name, image, uid;
 

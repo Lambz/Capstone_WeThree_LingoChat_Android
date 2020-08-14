@@ -1,11 +1,14 @@
 package com.lambz.lingo_chat;
 
 import java.security.MessageDigest;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils
 {
+    private static HashMap<String, String> mUserData;
+
     public static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
@@ -35,5 +38,39 @@ public class Utils
         {
             throw new RuntimeException(ex);
         }
+    }
+
+    public static String getLanguageCode(int code)
+    {
+        switch (code)
+        {
+            case 0:
+                return "en";
+            case 1:
+                return "fr";
+            case 2:
+                return "de";
+            case 3:
+                return "es";
+            case 4:
+                return "hi";
+            default:
+                return "en";
+        }
+    }
+
+    public static HashMap<String, String> getUserData()
+    {
+        return mUserData;
+    }
+
+    public static void setUserData(HashMap<String, String> userData)
+    {
+        Utils.mUserData = userData;
+    }
+
+    public static String getLanguageCode()
+    {
+        return Utils.getLanguageCode(Integer.parseInt(Utils.getUserData().get("lang")));
     }
 }

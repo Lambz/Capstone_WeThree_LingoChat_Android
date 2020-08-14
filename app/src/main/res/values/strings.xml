@@ -21,6 +21,15 @@
     <string name="select_contact">Select Contact</string>
     <string name="cancel">cancel</string>
     <string name="username">Username</string>
+    <string name="save">Save</string>
+    <string name="name_required_error">Name is required!</string>
+    <string name="email_required_error">Email is required!</string>
+    <string name="invalid_email_error">Enter valid email address!</string>
+    <string name="password_error">Password is required!</string>
+    <string name="short_password_error">Password must be at least 8 characters long!</string>
+    <string name="cpassword_error">Confirm Password is required!</string>
+    <string name="short_cpassword_error">Confirm Password must be at least 8 characters long!</string>
+    <string name="password_mismatch_error">Confirm Password does not match Password!</string>
 
     <array name="languages">
         <item>English</item>

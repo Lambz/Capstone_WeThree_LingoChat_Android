@@ -1,9 +1,11 @@
-package com.lambz.lingo_chat;
+package com.lambz.lingo_chat.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import com.lambz.lingo_chat.R;
 
 public class SplashScreenActivity extends AppCompatActivity
 {

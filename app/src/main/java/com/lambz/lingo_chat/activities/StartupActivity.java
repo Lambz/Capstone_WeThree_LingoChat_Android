@@ -1,4 +1,4 @@
-package com.lambz.lingo_chat;
+package com.lambz.lingo_chat.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,7 @@ import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.lambz.lingo_chat.R;
 
 public class StartupActivity extends AppCompatActivity
 {

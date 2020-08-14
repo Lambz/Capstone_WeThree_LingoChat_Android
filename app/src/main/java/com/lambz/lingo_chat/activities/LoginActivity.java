@@ -1,4 +1,4 @@
-package com.lambz.lingo_chat;
+package com.lambz.lingo_chat.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +39,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.facebook.FacebookSdk;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.lambz.lingo_chat.R;
+import com.lambz.lingo_chat.Utils;
 
 import org.json.JSONException;
 
