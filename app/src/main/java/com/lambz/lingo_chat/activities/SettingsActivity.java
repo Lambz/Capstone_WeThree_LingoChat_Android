@@ -54,7 +54,7 @@ public class SettingsActivity extends AppCompatActivity
     private CircleImageView mCircleImageView;
     private EditText mNameEditText;
     private SegmentedControl mSegmentedControl;
-    private HashMap<String, String> mUserDataMap = new HashMap<>();
+    private HashMap<String, Object> mUserDataMap = new HashMap<>();
     private Bitmap mSelectedImage;
     private Animation mAnimation;
     private Vibrator mVibrator;
@@ -105,7 +105,7 @@ public class SettingsActivity extends AppCompatActivity
         }
         int lang = mSegmentedControl.getLastSelectedAbsolutePosition();
         mUserDataMap.put("lang", String.valueOf(lang));
-        FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid()).setValue(mUserDataMap);
+        FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid()).updateChildren(mUserDataMap);
         changeAppLanguage(lang);
         if (mSelectedImage != null)
         {
@@ -151,13 +151,13 @@ public class SettingsActivity extends AppCompatActivity
             {
                 mUserDataMap.put(ds.getKey(), String.valueOf(ds.getValue()));
             }
-            String imgurl = mUserDataMap.getOrDefault("image", null);
+            String imgurl = (String) mUserDataMap.getOrDefault("image", null);
             if(imgurl != null && !imgurl.isEmpty())
             {
                 Picasso.get().load(imgurl).error(R.mipmap.placeholder).placeholder(R.mipmap.placeholder).into(mCircleImageView);
             }
             mNameEditText.setText(mUserDataMap.get("first_name") + " " + mUserDataMap.get("last_name"));
-            String lang = mUserDataMap.getOrDefault("lang","0");
+            String lang = (String) mUserDataMap.getOrDefault("lang","0");
             if(lang.isEmpty())
             {
                 mSegmentedControl.setSelectedSegment(0);

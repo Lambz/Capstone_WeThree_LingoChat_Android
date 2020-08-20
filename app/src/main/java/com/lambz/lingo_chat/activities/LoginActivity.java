@@ -218,11 +218,12 @@ public class LoginActivity extends AppCompatActivity
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithCredential:success");
                         //FirebaseUser user = mAuth.getCurrentUser();
-                        String current_user_id = mAuth.getCurrentUser().getUid();
-                        mDatabaseReference.child("Users").child(current_user_id).setValue("");
+//                        String current_user_id = mAuth.getCurrentUser().getUid();
+//                        mDatabaseReference.child("Users").child(current_user_id).setValue("");
                         mName = name;
                         mEmail = email;
-                        mDatabaseReference.child("Users").child(current_user_id).addValueEventListener(mValueEventListener);
+//                        mDatabaseReference.child("Users").child(current_user_id).addValueEventListener(mValueEventListener);
+                        mDatabaseReference.child("Users").addValueEventListener(mValueEventListener);
                         sendUserToMainActivity();
                         //updateUI(user);
                     } else
@@ -302,7 +303,8 @@ public class LoginActivity extends AppCompatActivity
             {
                 mName = object.getString("name");
                 mEmail = object.getString("email");
-                mDatabaseReference.child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(mValueEventListener);
+//                mDatabaseReference.child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(mValueEventListener);
+                mDatabaseReference.child("Users").addValueEventListener(mValueEventListener);
                 //                addUserInfo(name, email);
             } catch (JSONException e)
             {
@@ -356,6 +358,12 @@ public class LoginActivity extends AppCompatActivity
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot)
         {
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            if(!snapshot.hasChild(uid))
+            {
+                mDatabaseReference.child("Users").child(uid).setValue("");
+            }
+            snapshot = snapshot.child(uid);
             HashMap<String, String> profile_data = new HashMap<>();
             for (DataSnapshot dataSnapshot : snapshot.getChildren())
             {
