@@ -1,7 +1,9 @@
 package com.lambz.lingo_chat.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.TypedValue;
@@ -73,11 +75,21 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     Translation translation = mTranslate.translate(message.getText(), Translate.TranslateOption.targetLanguage(Utils.getLanguageCode()));
                     new Handler(Looper.getMainLooper()).post(() -> holder.senderTextView.setText(translation.getTranslatedText()));
                 }).start();
-            } else
+            } else if(message.getType().equals("image"))
             {
                 holder.senderImageView.setVisibility(View.VISIBLE);
                 Picasso.get().load(message.getLink()).error(R.drawable.image_error).into(holder.senderImageView);
                 holder.senderTextView.setVisibility(View.GONE);
+            }
+            else
+            {
+                holder.senderImageView.setVisibility(View.VISIBLE);
+                holder.senderTextView.setVisibility(View.GONE);
+                holder.layout.setOnClickListener(view ->
+                {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getLink()));
+                    mContext.startActivity(intent);
+                });
             }
         } else
         {
@@ -93,11 +105,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     Translation translation = mTranslate.translate(message.getText(), Translate.TranslateOption.targetLanguage(Utils.getLanguageCode()));
                     new Handler(Looper.getMainLooper()).post(() -> holder.receiverTextView.setText(translation.getTranslatedText()));
                 }).start();
-            } else
+            } else if(message.getType().equals("image"))
             {
                 holder.receiverImageView.setVisibility(View.VISIBLE);
                 Picasso.get().load(message.getLink()).error(R.drawable.file).into(holder.receiverImageView);
                 holder.receiverTextView.setVisibility(View.GONE);
+            } else
+            {
+                holder.receiverImageView.setVisibility(View.VISIBLE);
+                holder.receiverTextView.setVisibility(View.GONE);
+                holder.layout.setOnClickListener(view ->
+                {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getLink()));
+                    mContext.startActivity(intent);
+                });
             }
         }
         if(position == 0)

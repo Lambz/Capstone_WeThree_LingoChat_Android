@@ -258,7 +258,7 @@ public class ChatActivity extends AppCompatActivity
 
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
-                intent.setType("application/msword");
+                intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
                 startActivityForResult(intent.createChooser(intent,getString(R.string.select_word_file)), SELECT_FILE);
             }
         });
