@@ -91,7 +91,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void setUISettings()
     {
         mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        if (mUserLocation == null)
+        {
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+        }
         mMap.getUiSettings().setCompassEnabled(false);
     }
 
@@ -151,11 +154,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void enableUserLocationAndZoom()
     {
         mMap.setMyLocationEnabled(true);
-        Location location = getCurrentLocation();
-        if (location != null)
+        if(mUserLocation == null)
         {
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_LEVEL));
+            Location location = getCurrentLocation();
+            if (location != null)
+            {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_LEVEL));
+            }
+        }
+        else
+        {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(mUserLocation.getLatLng(), DEFAULT_ZOOM_LEVEL));
         }
     }
 
@@ -169,8 +179,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             intent.putExtra("location", mUserLocation);
             setResult(RESULT_OK, intent);
             finish();
-        }
-        else
+        } else
         {
             // Code for location not selected
         }
@@ -184,7 +193,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         MarkerOptions markerOptions = new MarkerOptions().position(latLng);
         mMarker = mMap.addMarker(markerOptions);
-        mUserLocation = new UserLocation(latLng.latitude,latLng.longitude);
+        mUserLocation = new UserLocation(latLng.latitude, latLng.longitude);
         zoomToMarker(mMarker);
         setInfoAsync(latLng, mMarker);
     }

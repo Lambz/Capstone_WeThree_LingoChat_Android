@@ -232,9 +232,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                             deleteMessageForEveryone(message);
                         } else if (i == 2)
                         {
-                            UserLocation userLocation = new UserLocation(Double.valueOf(message.getLat()),Double.valueOf(message.getLng()),message.getLocationtitle());
+                            UserLocation userLocation = new UserLocation(Double.valueOf(message.getLat()), Double.valueOf(message.getLng()), message.getLocationtitle());
                             Intent intent = new Intent(mContext, MapsActivity.class);
-                            intent.putExtra("location",userLocation);
+                            intent.putExtra("location", userLocation);
                             mContext.startActivity(intent);
                         }
                     });
@@ -322,7 +322,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                             deleteSendMessages(message);
                         } else if (i == 1)
                         {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getLink()));
+                            UserLocation userLocation = new UserLocation(Double.valueOf(message.getLat()), Double.valueOf(message.getLng()), message.getLocationtitle());
+                            Intent intent = new Intent(mContext, MapsActivity.class);
+                            intent.putExtra("location", userLocation);
                             mContext.startActivity(intent);
                         }
                     });
