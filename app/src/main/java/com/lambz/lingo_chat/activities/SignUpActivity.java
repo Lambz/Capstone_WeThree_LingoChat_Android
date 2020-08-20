@@ -194,4 +194,12 @@ public class SignUpActivity extends AppCompatActivity
         profile_data.put("email", email);
         mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(profile_data);
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        Intent intent = new Intent(this,StartupActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
