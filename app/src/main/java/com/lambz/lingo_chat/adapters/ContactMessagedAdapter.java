@@ -133,6 +133,12 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
         return mMessageList.size();
     }
 
+    public void addMessage(Message message, int position)
+    {
+        mMessageList.add(position,message);
+        this.notifyItemInserted(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder
     {
         ConstraintLayout mMainLayout;
@@ -154,5 +160,12 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
     {
         this.mMessageList = messageList;
         notifyDataSetChanged();
+    }
+
+    public Message deleteItem(int position)
+    {
+        Message message = mMessageList.remove(position);
+        notifyItemRemoved(position);
+        return message;
     }
 }

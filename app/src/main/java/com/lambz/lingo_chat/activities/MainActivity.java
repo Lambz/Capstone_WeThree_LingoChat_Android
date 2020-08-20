@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,14 +16,20 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -47,8 +54,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.concurrent.atomic.AtomicBoolean;
 
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+import okhttp3.internal.Util;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -88,6 +98,8 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mContactMessagedAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(mRecyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(mSimpleCallBack);
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
     }
 
     private void setMemberVariables()
@@ -359,6 +371,89 @@ public class MainActivity extends AppCompatActivity
         finish();
         overridePendingTransition(0, 0);
         startActivity(intent);
+    }
+
+    ItemTouchHelper.SimpleCallback mSimpleCallBack = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT)
+    {
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target)
+        {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction)
+        {
+            int position = viewHolder.getAdapterPosition();
+            if(direction == ItemTouchHelper.LEFT)
+            {
+                AtomicBoolean delete = new AtomicBoolean(true);
+                Message message = mContactMessagedAdapter.deleteItem(position);
+                Snackbar.make(mRecyclerView,message.getType(),Snackbar.LENGTH_LONG).setAction("Undo", v ->
+                {
+                    mContactMessagedAdapter.addMessage(message,position);
+                    delete.set(false);
+                }).show();
+                new Handler().postDelayed(() ->
+                {
+                    if(delete.get())
+                    {
+                        deleteMessage(message);
+                    }
+                },3000);
+            }
+        }
+
+        @Override
+        public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive)
+        {
+            new RecyclerViewSwipeDecorator.Builder(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    .addSwipeLeftBackgroundColor(ContextCompat.getColor(MainActivity.this,R.color.red))
+                    .addSwipeLeftActionIcon(R.drawable.ic_baseline_delete_outline_24)
+                    .addSwipeLeftLabel("Delete")
+                    .setSwipeLeftLabelColor(Color.WHITE)
+                    .create()
+                    .decorate();
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+    };
+
+    private void deleteMessage(Message message)
+    {
+        Log.v(TAG,"deleteMessage called");
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Messages").child(mCurrentUser.getUid());
+        if(message.getFrom().equals(mCurrentUser.getUid()))
+        {
+            Log.v(TAG,"condition if");
+            Log.v(TAG,"reference: "+databaseReference.child(message.getTo()));
+            databaseReference.child(message.getTo()).removeValue().addOnCompleteListener(task ->
+            {
+                if(task.isSuccessful())
+                {
+                    Log.v(TAG,"Successfully deleted");
+                }
+                else
+                {
+                    Log.v(TAG,"error: "+task.getException().getMessage());
+                }
+            });
+        }
+        else
+        {
+            Log.v(TAG,"condition else");
+            Log.v(TAG,"reference: "+databaseReference.child(message.getFrom()));
+            databaseReference.child(message.getFrom()).removeValue().addOnCompleteListener(task ->
+            {
+                if(task.isSuccessful())
+                {
+                    Log.v(TAG,"Successfully deleted");
+                }
+                else
+                {
+                    Log.v(TAG,"error: "+task.getException().getMessage());
+                }
+            });
+        }
     }
 
 }
