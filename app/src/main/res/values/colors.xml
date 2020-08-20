@@ -9,4 +9,5 @@
     <color name="text_color_2">#ffffff</color>
     <color name="background">#ffffff</color>
     <color name="colorOverlay">#99ffffff</color>
+    <color name="background_translucent">#CCFFFFFF</color>
 </resources>

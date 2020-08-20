@@ -432,7 +432,7 @@ public class ChatActivity extends AppCompatActivity
         message_data.put("to", mContact.getUid());
         message_data.put("id",message_key);
         message_data.put("lat", String.valueOf(location.getLat()));
-        message_data.put("lng", String.valueOf(location.getLat()));
+        message_data.put("lng", String.valueOf(location.getLng()));
         message_data.put("locationtitle", location.getTitle());
 
         Map message_body_details = new HashMap();

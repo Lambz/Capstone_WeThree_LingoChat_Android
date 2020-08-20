@@ -34,10 +34,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 {
 
     private static final int REQUEST_CODE = 1111;
+    private static final float DEFAULT_ZOOM_LEVEL = 13.25f;
+    private static final String TAG = "MapsActivity";
     private GoogleMap mMap;
     private UserLocation mUserLocation;
     private LocationManager mLocationManager;
-    private static final float DEFAULT_ZOOM_LEVEL = 13.25f;
     private Marker mMarker;
     private Button mSaveButton;
 
