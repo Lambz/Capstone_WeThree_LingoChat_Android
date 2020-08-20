@@ -2,11 +2,14 @@ package com.lambz.lingo_chat.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.cloud.translate.Translate;
@@ -29,6 +33,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.lambz.lingo_chat.R;
 import com.lambz.lingo_chat.Utils;
 import com.lambz.lingo_chat.adapters.MessageAdapter;
@@ -48,6 +55,7 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 public class ChatActivity extends AppCompatActivity
 {
     private static final String TAG = "ChatActivity";
+    private static final int SELECT_FILE = 438;
     private ImageView mUserImageView;
     private TextView mUserNameTextView;
     private EditText mMessageEditText;
@@ -58,6 +66,9 @@ public class ChatActivity extends AppCompatActivity
     private List<Message> mMessageList = new ArrayList<>();
     private MessageAdapter mMessageAdapter;
     private Translate mTranslate;
+    private String mFileType = "", mURL = "";
+    private Uri mFileUri;
+    private StorageTask mUploadTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -215,4 +226,162 @@ public class ChatActivity extends AppCompatActivity
 
         }
     };
+
+    public void sendFilesClicked(View view)
+    {
+        CharSequence options [] = new CharSequence[]{"Images","PDF Files","Ms Word Files"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
+        builder.setTitle("Select the File");
+        builder.setItems(options, (dialogInterface, i) ->
+        {
+            if (i == 0)
+            {
+                mFileType = "image";
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent.createChooser(intent,getString(R.string.select_image)), SELECT_FILE);
+            }
+            else if(i == 1)
+            {
+                mFileType = "pdf";
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("application/pdf");
+                startActivityForResult(intent.createChooser(intent,getString(R.string.select_pdf_file)), SELECT_FILE);
+            }
+            else if(i == 2)
+            {
+                mFileType = "docx";
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("application/msword");
+                startActivityForResult(intent.createChooser(intent,getString(R.string.select_word_file)), SELECT_FILE);
+            }
+        });
+        builder.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == SELECT_FILE && resultCode == RESULT_OK && data!= null && data.getData() != null)
+        {
+            mFileUri = data.getData();
+
+            if(!mFileType.equals("image"))
+            {
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Documents");
+                String messageSenderRef = "Messages/" + mCurrentUser.getUid() + "/" + mContact.getUid();
+                String messageReceiverRef = "Messages/" + mContact.getUid() + "/" + mCurrentUser.getUid();
+
+                DatabaseReference databaseReference = mDatabaseReference.child("Messages").child(mContact.getUid()).child(mCurrentUser.getUid()).push();
+
+                String message_key = databaseReference.getKey();
+                StorageReference filePath = storageReference.child(message_key+"."+mFileType);
+
+                filePath.putFile(mFileUri).continueWithTask((Continuation) task ->
+                {
+                    if(!task.isSuccessful())
+                    {
+                        Log.v(TAG,"then: "+task.getException().getMessage());
+                    }
+                    return filePath.getDownloadUrl();
+                }).addOnCompleteListener((OnCompleteListener<Uri>) task ->
+                {
+                    Uri downloadUrl = task.getResult();
+                    mURL = downloadUrl.toString();
+
+                    HashMap<String, String> message_data = new HashMap<>();
+                    message_data.put("text", "");
+                    message_data.put("type", mFileType);
+                    message_data.put("from", mCurrentUser.getUid());
+                    message_data.put("lang", Utils.getLanguageCode());
+                    message_data.put("link", mURL);
+                    message_data.put("fileName", mFileUri.getLastPathSegment());
+                    message_data.put("to", mContact.getUid());
+
+                    Map message_body_details = new HashMap();
+                    message_body_details.put(messageSenderRef + "/" + message_key, message_data);
+                    message_body_details.put(messageReceiverRef + "/" + message_key, message_data);
+
+                    mDatabaseReference.updateChildren(message_body_details).addOnCompleteListener(task1 ->
+                    {
+                        if (task1.isSuccessful())
+                        {
+                            Log.v(TAG, "sendClicked: Message Pushed");
+                        } else
+                        {
+                            Log.v(TAG, "sendClicked: Error");
+                        }
+                        mMessageEditText.setText("");
+                    });
+                });
+            }
+            else if(mFileType.equals("image"))
+            {
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Images");
+                String messageSenderRef = "Messages/" + mCurrentUser.getUid() + "/" + mContact.getUid();
+                String messageReceiverRef = "Messages/" + mContact.getUid() + "/" + mCurrentUser.getUid();
+
+                DatabaseReference databaseReference = mDatabaseReference.child("Messages").child(mContact.getUid()).child(mCurrentUser.getUid()).push();
+
+                String message_key = databaseReference.getKey();
+                StorageReference filePath = storageReference.child(message_key+".jpg");
+                mUploadTask = filePath.putFile(mFileUri);
+                mUploadTask.continueWithTask((Continuation) task ->
+                {
+                    if(!task.isSuccessful())
+                    {
+                        Log.v(TAG,"then: "+task.getException().getMessage());
+                    }
+                    return filePath.getDownloadUrl();
+                }).addOnCompleteListener((OnCompleteListener<Uri>) task ->
+                {
+                    if(task.isSuccessful())
+                    {
+                        Uri downloadUrl = task.getResult();
+                        mURL = downloadUrl.toString();
+
+                        HashMap<String, String> message_data = new HashMap<>();
+                        message_data.put("text", "");
+                        message_data.put("type", mFileType);
+                        message_data.put("from", mCurrentUser.getUid());
+                        message_data.put("lang", Utils.getLanguageCode());
+                        message_data.put("link", mURL);
+                        message_data.put("fileName", mFileUri.getLastPathSegment());
+                        message_data.put("to", mContact.getUid());
+
+                        Map message_body_details = new HashMap();
+                        message_body_details.put(messageSenderRef + "/" + message_key, message_data);
+                        message_body_details.put(messageReceiverRef + "/" + message_key, message_data);
+
+                        mDatabaseReference.updateChildren(message_body_details).addOnCompleteListener(task1 ->
+                        {
+                            if (task1.isSuccessful())
+                            {
+                                Log.v(TAG, "sendClicked: Message Pushed");
+                            } else
+                            {
+                                Log.v(TAG, "sendClicked: Error");
+                            }
+                            mMessageEditText.setText("");
+                        });
+                    }
+                    else
+                    {
+                        Log.v(TAG,"onActivityResult addOnCompleteListener: "+task.getException().getMessage());
+                    }
+                });
+            }
+            else
+            {
+                Log.v(TAG,"onActivityResult: problem");
+            }
+        }
+    }
 }

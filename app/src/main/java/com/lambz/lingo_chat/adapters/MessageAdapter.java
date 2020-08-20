@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.lambz.lingo_chat.R;
 import com.lambz.lingo_chat.Utils;
 import com.lambz.lingo_chat.models.Message;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -75,6 +76,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             } else
             {
                 holder.senderImageView.setVisibility(View.VISIBLE);
+                Picasso.get().load(message.getLink()).error(R.drawable.image_error).into(holder.senderImageView);
                 holder.senderTextView.setVisibility(View.GONE);
             }
         } else
@@ -94,6 +96,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             } else
             {
                 holder.receiverImageView.setVisibility(View.VISIBLE);
+                Picasso.get().load(message.getLink()).error(R.drawable.file).into(holder.receiverImageView);
                 holder.receiverTextView.setVisibility(View.GONE);
             }
         }
@@ -108,7 +111,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     @Override
     public int getItemCount()
     {
-        System.out.println(mMessageList.size());
         return mMessageList.size();
     }
 
