@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<Message> mMessageList;
     private ContactMessagedAdapter mContactMessagedAdapter;
     private Translate mTranslate;
+    private Locale mLocale;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -127,9 +128,9 @@ public class MainActivity extends AppCompatActivity
 
         mDialog.getUserImageView().setOnClickListener(view ->
         {
-            String[] arr = {"Camera", "Gallery"};
+            String[] arr = {getString(R.string.camera), getString(R.string.gallery)};
             AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
-            dialog.setTitle("Choose Image From: ");
+            dialog.setTitle(getString(R.string.choose_image));
             dialog.setItems(arr, (dialog1, position) ->
             {
                 if (position == 0)
@@ -335,11 +336,38 @@ public class MainActivity extends AppCompatActivity
     private void changeAppLanguage(int lang)
     {
         String languageToLoad = Utils.getLanguageCode(lang);
+        Log.v(TAG,"original: "+getResources().getConfiguration().locale+" changing to: "+Utils.getLanguageCode(lang));
+        boolean shouldRestart = !Utils.getLanguageCode(lang).equals(getResources().getConfiguration().locale.toString());
         Locale locale = new Locale(languageToLoad);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
         config.locale = locale;
         getBaseContext().getResources().updateConfiguration(config,
                 getBaseContext().getResources().getDisplayMetrics());
+
+        if(shouldRestart)
+        {
+            restartApplication();
+        }
+    }
+
+    private void restartApplication()
+    {
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        Log.v(TAG,"updated config");
+        if (mLocale != null)
+        {
+            newConfig.locale = mLocale;
+            Locale.setDefault(mLocale);
+            getBaseContext().getResources().updateConfiguration(newConfig, getBaseContext().getResources().getDisplayMetrics());
+        }
     }
 }
