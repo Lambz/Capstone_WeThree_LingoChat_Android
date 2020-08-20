@@ -48,7 +48,9 @@
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toTopOf="@id/message_edittext"
         app:layout_constraintTop_toBottomOf="@id/divider_view" />
 
     <EditText

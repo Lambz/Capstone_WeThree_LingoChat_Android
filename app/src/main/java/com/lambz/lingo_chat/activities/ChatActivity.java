@@ -1,7 +1,10 @@
 package com.lambz.lingo_chat.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,14 +17,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.lambz.lingo_chat.R;
 import com.lambz.lingo_chat.Utils;
+import com.lambz.lingo_chat.adapters.MessageAdapter;
 import com.lambz.lingo_chat.models.Contact;
+import com.lambz.lingo_chat.models.Message;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity
@@ -33,6 +43,9 @@ public class ChatActivity extends AppCompatActivity
     private Contact mContact;
     private DatabaseReference mDatabaseReference;
     private FirebaseUser mCurrentUser;
+    private RecyclerView mRecyclerView;
+    private List<Message> mMessageList = new ArrayList<>();
+    private MessageAdapter mMessageAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -41,6 +54,15 @@ public class ChatActivity extends AppCompatActivity
         setContentView(R.layout.activity_chat);
         getSupportActionBar().hide();
         setMemberVariables();
+        setupRecyclerView();
+    }
+
+    private void setupRecyclerView()
+    {
+        mMessageAdapter = new MessageAdapter(mMessageList, this);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mMessageAdapter);
     }
 
     private void setMemberVariables()
@@ -56,6 +78,7 @@ public class ChatActivity extends AppCompatActivity
             Picasso.get().load(mContact.getImage()).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(mUserImageView);
         }
         mUserNameTextView.setText(mContact.getName());
+        mRecyclerView = findViewById(R.id.recyclerview);
     }
 
     public void backClicked(View view)
@@ -103,4 +126,48 @@ public class ChatActivity extends AppCompatActivity
             mMessageEditText.setText("");
         });
     }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        System.out.println("current user: "+mCurrentUser.getUid());
+        System.out.println("contact user: "+mContact.getUid());
+        mDatabaseReference.child("Messages").child(mCurrentUser.getUid()).child(mContact.getUid()).addChildEventListener(mChildEventListener);
+    }
+
+    ChildEventListener mChildEventListener = new ChildEventListener()
+    {
+        @Override
+        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName)
+        {
+            Message message = snapshot.getValue(Message.class);
+            mMessageList.add(message);
+            mMessageAdapter.setMessageList(mMessageList);
+        }
+
+        @Override
+        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName)
+        {
+
+        }
+
+        @Override
+        public void onChildRemoved(@NonNull DataSnapshot snapshot)
+        {
+
+        }
+
+        @Override
+        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName)
+        {
+
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error)
+        {
+
+        }
+    };
 }

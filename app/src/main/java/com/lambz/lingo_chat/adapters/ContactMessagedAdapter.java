@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,11 +33,13 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
 {
     private List<Message> mMessageList;
     private Context mContext;
+    private FirebaseUser mCurrentUser;
 
     public ContactMessagedAdapter(List<Message> contactList, Context context)
     {
         this.mMessageList = contactList;
         this.mContext = context;
+        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
     @NonNull
@@ -60,7 +64,16 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
         {
             holder.mLastMessageTextView.setText(message.getType());
         }
-        FirebaseDatabase.getInstance().getReference().child("Users").child(message.getTo()).addListenerForSingleValueEvent(new ValueEventListener()
+        String uid;
+        if(message.getFrom().equals(mCurrentUser.getUid()))
+        {
+            uid = message.getTo();
+        }
+        else
+        {
+            uid = message.getFrom();
+        }
+        FirebaseDatabase.getInstance().getReference().child("Users").child(uid).addListenerForSingleValueEvent(new ValueEventListener()
         {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot)
@@ -81,7 +94,7 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
         });
         holder.mMainLayout.setOnClickListener(view ->
         {
-            Contact contact = new Contact(users[0].getFirst_name()+" "+users[0].getLast_name(), users[0].getImage(), message.getTo());
+            Contact contact = new Contact(users[0].getFirst_name()+" "+users[0].getLast_name(), users[0].getImage(), uid);
             Intent intent = new Intent(mContext, ChatActivity.class);
             intent.putExtra("contact", contact);
             mContext.startActivity(intent);
