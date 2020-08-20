@@ -2,14 +2,14 @@ package com.lambz.lingo_chat.models;
 
 public class Message
 {
-    String from, lang, text, type, link, to, fileName;
+    String from, lang, text, type, link, to, fileName, id;
 
     public Message()
     {
 
     }
 
-    public Message(String from, String lang, String text, String type, String link, String to, String fileName)
+    public Message(String from, String lang, String text, String type, String link, String to, String fileName, String id)
     {
         this.from = from;
         this.lang = lang;
@@ -18,6 +18,17 @@ public class Message
         this.link = link;
         this.to = to;
         this.fileName = fileName;
+        this.id = id;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
     }
 
     public String getTo()

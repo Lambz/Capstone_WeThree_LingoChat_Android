@@ -166,6 +166,7 @@ public class ChatActivity extends AppCompatActivity
         message_data.put("lang", Utils.getLanguageCode());
         message_data.put("link", "");
         message_data.put("to", mContact.getUid());
+        message_data.put("id",message_key);
 
         Map message_body_details = new HashMap();
         message_body_details.put(messageSenderRef + "/" + message_key, message_data);
@@ -304,6 +305,7 @@ public class ChatActivity extends AppCompatActivity
                     message_data.put("link", mURL);
                     message_data.put("fileName", mFileUri.getLastPathSegment());
                     message_data.put("to", mContact.getUid());
+                    message_data.put("id",message_key);
 
                     Map message_body_details = new HashMap();
                     message_body_details.put(messageSenderRef + "/" + message_key, message_data);
@@ -355,6 +357,7 @@ public class ChatActivity extends AppCompatActivity
                         message_data.put("link", mURL);
                         message_data.put("fileName", mFileUri.getLastPathSegment());
                         message_data.put("to", mContact.getUid());
+                        message_data.put("id",message_key);
 
                         Map message_body_details = new HashMap();
                         message_body_details.put(messageSenderRef + "/" + message_key, message_data);
