@@ -51,7 +51,7 @@ public class ChatActivity extends AppCompatActivity
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mContact = (Contact) getIntent().getSerializableExtra("contact");
-        if(mContact.getImage() != null)
+        if(!mContact.getImage().isEmpty())
         {
             Picasso.get().load(mContact.getImage()).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(mUserImageView);
         }
@@ -83,26 +83,24 @@ public class ChatActivity extends AppCompatActivity
         message_data.put("type","text");
         message_data.put("from",mCurrentUser.getUid());
         message_data.put("lang", Utils.getLanguageCode());
+        message_data.put("link","");
+        message_data.put("to",mContact.getUid());
 
         Map message_body_details = new HashMap();
         message_body_details.put(messageSenderRef+"/"+message_key,message_data);
         message_body_details.put(messageReceiverRef+"/"+message_key,message_data);
 
-        mDatabaseReference.updateChildren(message_body_details).addOnCompleteListener(new OnCompleteListener()
+        mDatabaseReference.updateChildren(message_body_details).addOnCompleteListener(task ->
         {
-            @Override
-            public void onComplete(@NonNull Task task)
+            if(task.isSuccessful())
             {
-                if(task.isSuccessful())
-                {
-                    Log.v(TAG,"sendClicked: Message Pushed");
-                }
-                else
-                {
-                    Log.v(TAG,"sendClicked: Error");
-                }
-                mMessageEditText.setText("");
+                Log.v(TAG,"sendClicked: Message Pushed");
             }
+            else
+            {
+                Log.v(TAG,"sendClicked: Error");
+            }
+            mMessageEditText.setText("");
         });
     }
 }

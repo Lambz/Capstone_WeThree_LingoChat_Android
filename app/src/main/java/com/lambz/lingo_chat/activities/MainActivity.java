@@ -34,11 +34,15 @@ import com.google.firebase.storage.StorageReference;
 import com.lambz.lingo_chat.GetStartedDialog;
 import com.lambz.lingo_chat.R;
 import com.lambz.lingo_chat.Utils;
+import com.lambz.lingo_chat.adapters.ContactMessagedAdapter;
 import com.lambz.lingo_chat.models.Contact;
+import com.lambz.lingo_chat.models.Message;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -56,6 +60,8 @@ public class MainActivity extends AppCompatActivity
     private StorageReference mStorageReference;
     private HashMap<String, String> mUserInfo;
     private RecyclerView mRecyclerView;
+    private ArrayList<Message> mMessageList;
+    private ContactMessagedAdapter mContactMessagedAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -64,6 +70,15 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
         setMemberVariables();
+        setupRecyclerView();
+    }
+
+    private void setupRecyclerView()
+    {
+        mContactMessagedAdapter = new ContactMessagedAdapter(mMessageList, this);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mContactMessagedAdapter);
     }
 
     private void setMemberVariables()
@@ -75,7 +90,14 @@ public class MainActivity extends AppCompatActivity
         mStorageReference = FirebaseStorage.getInstance().getReference().child("Profile Images");
         mUserInfo = new HashMap<>();
         mRecyclerView = findViewById(R.id.recyclerview);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mMessageList = new ArrayList<>();
+        FirebaseDatabase.getInstance().getReference().child("Messages").child(mCurrentUser.getUid()).addValueEventListener(mUsersValueEventListener);
     }
 
     public void newMessageClicked(View view)
@@ -222,8 +244,8 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK && data != null)
             {
                 Contact contact = (Contact) data.getSerializableExtra("contact");
-                Intent intent = new Intent(MainActivity.this,ChatActivity.class);
-                intent.putExtra("contact",contact);
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                intent.putExtra("contact", contact);
                 startActivity(intent);
                 Log.v(TAG, "onActivityResult: name: " + contact.getName());
             }
@@ -247,7 +269,7 @@ public class MainActivity extends AppCompatActivity
             {
                 mUserInfo.put(ds.getKey(), String.valueOf(ds.getValue()));
             }
-            if (snapshot.exists() && snapshot.hasChild("lang"))
+            if (snapshot.exists() && snapshot.hasChild("lang") && !snapshot.child("lang").getValue().equals(""))
             {
                 //Has
             } else
@@ -270,4 +292,35 @@ public class MainActivity extends AppCompatActivity
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
+
+    ValueEventListener mUsersValueEventListener = new ValueEventListener()
+    {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot)
+        {
+            for (DataSnapshot ds : snapshot.getChildren())
+            {
+                //                Message message = ds.getChildren().iterator().next().getValue(Message.class);
+                Message message = getLastElement(ds).getValue(Message.class);
+                mMessageList.add(message);
+            }
+            mContactMessagedAdapter.setMessageList(mMessageList);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error)
+        {
+
+        }
+
+        public DataSnapshot getLastElement(final DataSnapshot dataSnapshot) {
+            Iterator<DataSnapshot> itr = dataSnapshot.getChildren().iterator();
+            DataSnapshot lastElement = itr.next();
+            Message lastMessage = lastElement.getValue(Message.class);
+            while(itr.hasNext()) {
+                lastElement = itr.next();
+            }
+            return lastElement;
+        }
+    };
 }

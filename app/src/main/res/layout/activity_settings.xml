@@ -69,5 +69,18 @@
         app:segments="@array/languages"
         app:textVerticalPadding="6dp" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:onClick="signOutClicked"
+        android:background="@drawable/button_background"
+        android:text="@string/sign_out"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/segmented_control" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

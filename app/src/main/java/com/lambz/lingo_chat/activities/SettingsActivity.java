@@ -88,21 +88,20 @@ public class SettingsActivity extends AppCompatActivity
     public void saveClicked(View view)
     {
         String name = mNameEditText.getText().toString();
-        if(name.isEmpty())
+        if (name.isEmpty())
         {
             mNameEditText.setError(getString(R.string.name_required_error));
             shakeAndVibrate(mNameEditText);
             return;
         }
         String strs[] = name.split(" ");
-        mUserDataMap.put("first-name",strs[0]);
-        if(strs.length>1)
+        mUserDataMap.put("first_name", strs[0]);
+        if (strs.length > 1)
         {
-            mUserDataMap.put("last-name",strs[1]);
-        }
-        else
+            mUserDataMap.put("last_name", strs[1]);
+        } else
         {
-            mUserDataMap.put("last-name","");
+            mUserDataMap.put("last_name", "");
         }
         int lang = mSegmentedControl.getLastSelectedAbsolutePosition();
         mUserDataMap.put("lang", String.valueOf(lang));
@@ -123,17 +122,17 @@ public class SettingsActivity extends AppCompatActivity
         byte[] data = baos.toByteArray();
         filePath.putBytes(data).continueWithTask(task ->
         {
-            if(!task.isSuccessful())
+            if (!task.isSuccessful())
             {
                 throw task.getException();
             }
             return filePath.getDownloadUrl();
         }).addOnCompleteListener(task ->
         {
-            if(task.isSuccessful())
+            if (task.isSuccessful())
             {
                 Uri download_uri = task.getResult();
-                mUserDataMap.put("image",download_uri.toString());
+                mUserDataMap.put("image", download_uri.toString());
                 FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid()).setValue(mUserDataMap);
             }
         });
@@ -152,8 +151,12 @@ public class SettingsActivity extends AppCompatActivity
             {
                 mUserDataMap.put(ds.getKey(), String.valueOf(ds.getValue()));
             }
-            Picasso.get().load(mUserDataMap.getOrDefault("image", null)).error(R.mipmap.placeholder).placeholder(R.mipmap.placeholder).into(mCircleImageView);
-            mNameEditText.setText(mUserDataMap.get("first-name")+" "+mUserDataMap.get("last-name"));
+            String imgurl = mUserDataMap.getOrDefault("image", null);
+            if(imgurl != null && !imgurl.isEmpty())
+            {
+                Picasso.get().load(imgurl).error(R.mipmap.placeholder).placeholder(R.mipmap.placeholder).into(mCircleImageView);
+            }
+            mNameEditText.setText(mUserDataMap.get("first_name") + " " + mUserDataMap.get("last_name"));
             mSegmentedControl.setSelectedSegment(Integer.parseInt(mUserDataMap.get("lang")));
         }
 
@@ -232,8 +235,7 @@ public class SettingsActivity extends AppCompatActivity
                 mSelectedImage = bitmap;
                 mCircleImageView.setImageBitmap(mSelectedImage);
             }
-        }
-        else if (requestCode == GALLERY_REQUEST_CODE)
+        } else if (requestCode == GALLERY_REQUEST_CODE)
         {
             if (resultCode == RESULT_OK && data != null && data.getData() != null)
             {
@@ -249,5 +251,13 @@ public class SettingsActivity extends AppCompatActivity
     {
         mVibrator.vibrate(VIBRATION_DURATION);
         editText.startAnimation(mAnimation);
+    }
+
+    public void signOutClicked(View view)
+    {
+        FirebaseAuth.getInstance().signOut();
+        Intent intent = new Intent(this, StartupActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

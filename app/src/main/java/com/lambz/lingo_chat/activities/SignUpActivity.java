@@ -178,7 +178,18 @@ public class SignUpActivity extends AppCompatActivity
     private void addUserInfo(String name, String email)
     {
         HashMap<String, String > profile_data = new HashMap<String,String>();
-        profile_data.put("name", name);
+        String strs [] = name.split(" ");
+        profile_data.put("first_name",strs[0]);
+        if(strs.length>1)
+        {
+            profile_data.put("last_name",strs[1]);
+        }
+        else
+        {
+            profile_data.put("last_name","");
+        }
+        profile_data.put("lang","");
+        profile_data.put("image","");
         profile_data.put("email", email);
         mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(profile_data);
     }

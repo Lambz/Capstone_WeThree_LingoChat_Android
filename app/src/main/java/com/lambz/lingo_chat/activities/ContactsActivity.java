@@ -147,10 +147,10 @@ public class ContactsActivity extends AppCompatActivity
                         {
                             image = String.valueOf(ds.child("image").getValue());
                         }
-                        String name = String.valueOf(ds.child("first-name").getValue());
-                        if (ds.hasChild("last-name"))
+                        String name = String.valueOf(ds.child("first_name").getValue());
+                        if (ds.hasChild("last_name"))
                         {
-                            name += " " + ds.child("last-name").getValue();
+                            name += " " + ds.child("last_name").getValue();
                         }
                         mContactList.add(new Contact(name, image, ds.getKey()));
                     }

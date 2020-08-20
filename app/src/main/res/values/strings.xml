@@ -30,6 +30,7 @@
     <string name="cpassword_error">Confirm Password is required!</string>
     <string name="short_cpassword_error">Confirm Password must be at least 8 characters long!</string>
     <string name="password_mismatch_error">Confirm Password does not match Password!</string>
+    <string name="sign_out">Sign Out</string>
 
     <array name="languages">
         <item>English</item>

@@ -322,15 +322,17 @@ public class LoginActivity extends AppCompatActivity
     {
         HashMap<String, String> profile_data = new HashMap<>();
         String [] str = name.split(" ");
-        profile_data.put("first-name", str[0]);
+        profile_data.put("first_name", str[0]);
         if(str.length>1)
         {
-            profile_data.put("last-name",str[1]);
+            profile_data.put("last_name",str[1]);
         }
         else
         {
-            profile_data.put("last-name","");
+            profile_data.put("last_name","");
         }
+        profile_data.put("lang","");
+        profile_data.put("image","");
         profile_data.put("email", email);
         mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(profile_data);
     }

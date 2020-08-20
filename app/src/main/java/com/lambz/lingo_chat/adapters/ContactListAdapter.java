@@ -45,7 +45,10 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
         Contact contact = mContactList.get(position);
-        Picasso.get().load(contact.getImage()).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(holder.mUserImageView);
+        if (!contact.getImage().isEmpty())
+        {
+            Picasso.get().load(contact.getImage()).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(holder.mUserImageView);
+        }
         holder.mUserNameTextView.setText(contact.getName());
         holder.mMainLayout.setOnClickListener(view -> mContactClickedInterface.contactClicked(contact));
     }
@@ -53,7 +56,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     @Override
     public int getItemCount()
     {
-        if(mContactList == null)
+        if (mContactList == null)
         {
             return 0;
         }
