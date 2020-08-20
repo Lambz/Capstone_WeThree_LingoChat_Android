@@ -56,6 +56,7 @@ public class ChatActivity extends AppCompatActivity
 {
     private static final String TAG = "ChatActivity";
     private static final int SELECT_FILE = 438;
+    private static final int MAPS_REQUEST_CODE = 678;
     private ImageView mUserImageView;
     private TextView mUserNameTextView;
     private EditText mMessageEditText;
@@ -278,6 +279,8 @@ public class ChatActivity extends AppCompatActivity
             else if(i == 3)
             {
                 mFileType = "location";
+                Intent intent = new Intent(ChatActivity.this,MapsActivity.class);
+                startActivityForResult(intent,MAPS_REQUEST_CODE);
             }
         });
         builder.show();
@@ -402,6 +405,10 @@ public class ChatActivity extends AppCompatActivity
             {
                 Log.v(TAG,"onActivityResult: problem");
             }
+        }
+        else if (requestCode == MAPS_REQUEST_CODE && resultCode == RESULT_OK)
+        {
+
         }
     }
 }

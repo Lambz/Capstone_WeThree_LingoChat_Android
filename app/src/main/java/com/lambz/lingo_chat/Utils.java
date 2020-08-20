@@ -1,5 +1,7 @@
 package com.lambz.lingo_chat;
 
+import android.location.Address;
+
 import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -85,5 +87,31 @@ public class Utils
     public static String getIntLanguageCode()
     {
         return Utils.getUserData().get("lang");
+    }
+
+    public static String getFormattedAddress(Address address)
+    {
+        StringBuilder title = new StringBuilder();
+        if (address.getSubThoroughfare() != null)
+        {
+            title.append(address.getSubThoroughfare());
+        }
+        if (address.getThoroughfare() != null)
+        {
+            if (!title.toString().isEmpty())
+            {
+                title.append(", ");
+            }
+            title.append(address.getThoroughfare());
+        }
+        if (address.getPostalCode() != null)
+        {
+            if (!title.toString().isEmpty())
+            {
+                title.append(", ");
+            }
+            title.append(address.getPostalCode());
+        }
+        return title.toString();
     }
 }
