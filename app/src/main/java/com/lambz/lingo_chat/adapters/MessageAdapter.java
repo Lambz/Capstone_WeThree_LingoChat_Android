@@ -28,7 +28,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.lambz.lingo_chat.R;
 import com.lambz.lingo_chat.Utils;
 import com.lambz.lingo_chat.activities.ImageViewerActivity;
+import com.lambz.lingo_chat.activities.MapsActivity;
 import com.lambz.lingo_chat.models.Message;
+import com.lambz.lingo_chat.models.UserLocation;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -230,7 +232,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                             deleteMessageForEveryone(message);
                         } else if (i == 2)
                         {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getLink()));
+                            UserLocation userLocation = new UserLocation(Double.valueOf(message.getLat()),Double.valueOf(message.getLng()),message.getLocationtitle());
+                            Intent intent = new Intent(mContext, MapsActivity.class);
+                            intent.putExtra("location",userLocation);
                             mContext.startActivity(intent);
                         }
                     });
