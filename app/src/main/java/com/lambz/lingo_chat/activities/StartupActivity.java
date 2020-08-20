@@ -20,6 +20,7 @@ public class StartupActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_startup);
+        getSupportActionBar().hide();
     }
 
     public void signUpClicked(View view)

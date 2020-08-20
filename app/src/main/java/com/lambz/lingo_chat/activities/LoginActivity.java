@@ -94,6 +94,7 @@ public class LoginActivity extends AppCompatActivity
         signInButton.setOnClickListener(mGoogleSignInClicked);
 
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        getSupportActionBar().hide();
     }
 
     @Override

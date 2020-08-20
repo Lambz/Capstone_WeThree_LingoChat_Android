@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LingoChat</string>
+    <string name="app_name" translatable="false">LingoChat</string>
     <string name="get_started">Get Started</string>
     <string name="start_with_signing_up_or_sign_in">Start with signing up or sign in</string>
     <string name="sign_up">Sign Up</string>

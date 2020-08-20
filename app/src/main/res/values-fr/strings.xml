@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">LingoChat</string>
     <string name="get_started">Commencer</string>
     <string name="start_with_signing_up_or_sign_in">Commencez par vous inscrire ou connectez-vous</string>
     <string name="sign_up">S\'inscrire</string>

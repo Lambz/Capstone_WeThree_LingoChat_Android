@@ -46,6 +46,7 @@ public class SignUpActivity extends AppCompatActivity
         mVibrator = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
+        getSupportActionBar().hide();
     }
 
     public void signInClicked(View view)
