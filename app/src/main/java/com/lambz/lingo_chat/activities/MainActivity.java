@@ -354,20 +354,11 @@ public class MainActivity extends AppCompatActivity
     private void restartApplication()
     {
         Intent intent = getIntent();
+        overridePendingTransition(0, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         finish();
+        overridePendingTransition(0, 0);
         startActivity(intent);
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig)
-    {
-        super.onConfigurationChanged(newConfig);
-        Log.v(TAG,"updated config");
-        if (mLocale != null)
-        {
-            newConfig.locale = mLocale;
-            Locale.setDefault(mLocale);
-            getBaseContext().getResources().updateConfiguration(newConfig, getBaseContext().getResources().getDisplayMetrics());
-        }
-    }
 }
