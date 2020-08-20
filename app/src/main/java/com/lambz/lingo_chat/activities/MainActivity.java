@@ -323,6 +323,7 @@ public class MainActivity extends AppCompatActivity
             for (DataSnapshot ds : snapshot.getChildren())
             {
                 Message message = getLastElement(ds).getValue(Message.class);
+                deleteMessageFromThisID(message);
                 mMessageList.add(message);
             }
             mContactMessagedAdapter.setMessageList(mMessageList);
@@ -344,6 +345,18 @@ public class MainActivity extends AppCompatActivity
             return lastElement;
         }
     };
+
+    private void deleteMessageFromThisID(Message message)
+    {
+        for(Message message1: mMessageList)
+        {
+            if(message.getFrom().equals(message1.getFrom()))
+            {
+                mMessageList.remove(message1);
+                break;
+            }
+        }
+    }
 
     private void changeAppLanguage(int lang)
     {
