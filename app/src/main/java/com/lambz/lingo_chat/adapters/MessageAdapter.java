@@ -27,6 +27,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.lambz.lingo_chat.R;
 import com.lambz.lingo_chat.Utils;
+import com.lambz.lingo_chat.activities.ImageViewerActivity;
 import com.lambz.lingo_chat.models.Message;
 import com.squareup.picasso.Picasso;
 
@@ -201,8 +202,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         }
                         else if(i==2)
                         {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getLink()));
-                            mContext.startActivity(intent);
+                            startImageViewerActivity(message);
                         }
                     });
                     builder.show();
@@ -272,8 +272,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         }
                         else if(i==1)
                         {
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(message.getLink()));
-                            mContext.startActivity(intent);
+                            startImageViewerActivity(message);
                         }
                     });
                     builder.show();
@@ -387,5 +386,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 Toast.makeText(mContext, "Error Occured while deleting", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void startImageViewerActivity(Message message)
+    {
+        Intent intent = new Intent(mContext, ImageViewerActivity.class);
+        intent.putExtra("url",message.getLink());
+        mContext.startActivity(intent);
     }
 }
