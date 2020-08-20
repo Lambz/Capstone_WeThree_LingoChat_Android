@@ -36,6 +36,7 @@ import java.util.List;
 
 public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessagedAdapter.ViewHolder>
 {
+    private static final String TAG = "ContactMessagedAdapter";
     private List<Message> mMessageList;
     private Context mContext;
     private FirebaseUser mCurrentUser;
@@ -75,6 +76,11 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
         } else
         {
             holder.mLastMessageTextView.setText(message.getType());
+            new Thread(() ->
+            {
+                Translation translation = mTranslate.translate(message.getType(), Translate.TranslateOption.targetLanguage(Utils.getLanguageCode()));
+                new Handler(Looper.getMainLooper()).post(() -> holder.mLastMessageTextView.setText(translation.getTranslatedText()));
+            }).start();
         }
         String uid;
         if (message.getFrom().equals(mCurrentUser.getUid()))
