@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
+import com.google.cloud.translate.Translation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -63,7 +66,8 @@ public class ChatActivity extends AppCompatActivity
         setContentView(R.layout.activity_chat);
         getSupportActionBar().hide();
         setMemberVariables();
-        setupRecyclerView();setupBlurView();
+        setupRecyclerView();
+        setupBlurView();
     }
 
     private void setupBlurView()
@@ -110,13 +114,18 @@ public class ChatActivity extends AppCompatActivity
         mDatabaseReference = FirebaseDatabase.getInstance().getReference();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         mContact = (Contact) getIntent().getSerializableExtra("contact");
-        if(!mContact.getImage().isEmpty())
+        if (!mContact.getImage().isEmpty())
         {
             Picasso.get().load(mContact.getImage()).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(mUserImageView);
         }
         mUserNameTextView.setText(mContact.getName());
         mRecyclerView = findViewById(R.id.recyclerview);
         mTranslate = TranslateOptions.newBuilder().setApiKey(getString(R.string.google_translate_api_key)).build().getService();
+        new Thread(() ->
+        {
+            Translation translation = mTranslate.translate(mContact.getName(), Translate.TranslateOption.targetLanguage(Utils.getLanguageCode()));
+            new Handler(Looper.getMainLooper()).post(() -> mUserNameTextView.setText(translation.getTranslatedText()));
+        }).start();
     }
 
     public void backClicked(View view)
@@ -127,39 +136,38 @@ public class ChatActivity extends AppCompatActivity
     public void sendClicked(View view)
     {
         String message = mMessageEditText.getText().toString();
-        if(message.isEmpty())
+        if (message.isEmpty())
         {
             return;
         }
 
-        String messageSenderRef = "Messages/"+mCurrentUser.getUid()+"/"+mContact.getUid();
-        String messageReceiverRef = "Messages/"+mContact.getUid()+"/"+mCurrentUser.getUid();
+        String messageSenderRef = "Messages/" + mCurrentUser.getUid() + "/" + mContact.getUid();
+        String messageReceiverRef = "Messages/" + mContact.getUid() + "/" + mCurrentUser.getUid();
 
         DatabaseReference databaseReference = mDatabaseReference.child("Messages").child(mContact.getUid()).child(mCurrentUser.getUid()).push();
 
         String message_key = databaseReference.getKey();
 
-        HashMap<String,String> message_data = new HashMap<>();
-        message_data.put("text",message);
-        message_data.put("type","text");
-        message_data.put("from",mCurrentUser.getUid());
+        HashMap<String, String> message_data = new HashMap<>();
+        message_data.put("text", message);
+        message_data.put("type", "text");
+        message_data.put("from", mCurrentUser.getUid());
         message_data.put("lang", Utils.getLanguageCode());
-        message_data.put("link","");
-        message_data.put("to",mContact.getUid());
+        message_data.put("link", "");
+        message_data.put("to", mContact.getUid());
 
         Map message_body_details = new HashMap();
-        message_body_details.put(messageSenderRef+"/"+message_key,message_data);
-        message_body_details.put(messageReceiverRef+"/"+message_key,message_data);
+        message_body_details.put(messageSenderRef + "/" + message_key, message_data);
+        message_body_details.put(messageReceiverRef + "/" + message_key, message_data);
 
         mDatabaseReference.updateChildren(message_body_details).addOnCompleteListener(task ->
         {
-            if(task.isSuccessful())
+            if (task.isSuccessful())
             {
-                Log.v(TAG,"sendClicked: Message Pushed");
-            }
-            else
+                Log.v(TAG, "sendClicked: Message Pushed");
+            } else
             {
-                Log.v(TAG,"sendClicked: Error");
+                Log.v(TAG, "sendClicked: Error");
             }
             mMessageEditText.setText("");
         });

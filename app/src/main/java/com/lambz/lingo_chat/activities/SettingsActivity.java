@@ -133,7 +133,7 @@ public class SettingsActivity extends AppCompatActivity
             {
                 Uri download_uri = task.getResult();
                 mUserDataMap.put("image", download_uri.toString());
-                FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid()).setValue(mUserDataMap);
+                FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid()).updateChildren(mUserDataMap);
             }
         });
     }
