@@ -157,7 +157,15 @@ public class SettingsActivity extends AppCompatActivity
                 Picasso.get().load(imgurl).error(R.mipmap.placeholder).placeholder(R.mipmap.placeholder).into(mCircleImageView);
             }
             mNameEditText.setText(mUserDataMap.get("first_name") + " " + mUserDataMap.get("last_name"));
-            mSegmentedControl.setSelectedSegment(Integer.parseInt(mUserDataMap.get("lang")));
+            String lang = mUserDataMap.getOrDefault("lang","0");
+            if(lang.isEmpty())
+            {
+                mSegmentedControl.setSelectedSegment(0);
+            }
+            else
+            {
+                mSegmentedControl.setSelectedSegment(Integer.parseInt(lang));
+            }
         }
 
         @Override

@@ -22,6 +22,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -64,6 +66,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private ArrayList<Message> mMessageList;
     private ContactMessagedAdapter mContactMessagedAdapter;
+    private Translate mTranslate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity
 
     private void setupRecyclerView()
     {
-        mContactMessagedAdapter = new ContactMessagedAdapter(mMessageList, this);
+        mContactMessagedAdapter = new ContactMessagedAdapter(mMessageList, this, mTranslate);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mContactMessagedAdapter);
@@ -93,6 +96,7 @@ public class MainActivity extends AppCompatActivity
         mStorageReference = FirebaseStorage.getInstance().getReference().child("Profile Images");
         mUserInfo = new HashMap<>();
         mRecyclerView = findViewById(R.id.recyclerview);
+        mTranslate = TranslateOptions.newBuilder().setApiKey(getString(R.string.google_translate_api_key)).build().getService();
     }
 
     @Override

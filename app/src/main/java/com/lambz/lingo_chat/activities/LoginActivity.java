@@ -37,8 +37,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.facebook.FacebookSdk;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.lambz.lingo_chat.R;
 import com.lambz.lingo_chat.Utils;
 
@@ -59,6 +62,8 @@ public class LoginActivity extends AppCompatActivity
     private String TAG = "LoginActivity";
     private CallbackManager mCallbackManager;
     private DatabaseReference mDatabaseReference;
+    private String mName;
+    private String mEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -142,17 +147,13 @@ public class LoginActivity extends AppCompatActivity
 
     private void login(String email, String password)
     {
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>()
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task ->
         {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task)
+            if (task.isSuccessful())
             {
-                if (task.isSuccessful())
-                {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
     }
@@ -219,7 +220,9 @@ public class LoginActivity extends AppCompatActivity
                         //FirebaseUser user = mAuth.getCurrentUser();
                         String current_user_id = mAuth.getCurrentUser().getUid();
                         mDatabaseReference.child("Users").child(current_user_id).setValue("");
-                        addUserInfo(name, email);
+                        mName = name;
+                        mEmail = email;
+                        mDatabaseReference.child("Users").child(current_user_id).addValueEventListener(mValueEventListener);
                         sendUserToMainActivity();
                         //updateUI(user);
                     } else
@@ -297,9 +300,10 @@ public class LoginActivity extends AppCompatActivity
             String email = null;
             try
             {
-                name = object.getString("name");
-                email = object.getString("name");
-                addUserInfo(name, email);
+                mName = object.getString("name");
+                mEmail = object.getString("email");
+                mDatabaseReference.child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(mValueEventListener);
+                //                addUserInfo(name, email);
             } catch (JSONException e)
             {
                 e.printStackTrace();
@@ -318,22 +322,52 @@ public class LoginActivity extends AppCompatActivity
         finish();
     }
 
-    private void addUserInfo(String name, String email)
+    private void addUserInfo(String name, String email, HashMap<String, String> profile_data)
     {
-        HashMap<String, String> profile_data = new HashMap<>();
-        String [] str = name.split(" ");
-        profile_data.put("first_name", str[0]);
-        if(str.length>1)
+        for(String key: profile_data.keySet())
         {
-            profile_data.put("last_name",str[1]);
+            Log.v(TAG,key+": "+profile_data.get(key));
         }
-        else
+        String[] str = name.split(" ");
+        profile_data.put("first_name", str[0]);
+        if (str.length > 1)
+        {
+            profile_data.put("last_name", str[1]);
+        } else
         {
             profile_data.put("last_name","");
         }
         profile_data.put("lang","");
         profile_data.put("image","");
         profile_data.put("email", email);
+        if(!profile_data.containsKey("lang"))
+        {
+            profile_data.put("lang", "");
+        }
+        if(!profile_data.containsKey("image"))
+        {
+            profile_data.put("image", "");
+        }
         mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(profile_data);
     }
+
+    ValueEventListener mValueEventListener = new ValueEventListener()
+    {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot)
+        {
+            HashMap<String, String> profile_data = new HashMap<>();
+            for (DataSnapshot dataSnapshot : snapshot.getChildren())
+            {
+                profile_data.put(dataSnapshot.getKey(), dataSnapshot.getValue().toString());
+            }
+            addUserInfo(mName, mEmail, profile_data);
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error)
+        {
+
+        }
+    };
 }

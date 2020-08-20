@@ -44,8 +44,6 @@ public class Utils
     {
         switch (code)
         {
-            case 0:
-                return "en";
             case 1:
                 return "fr";
             case 2:
@@ -71,6 +69,16 @@ public class Utils
 
     public static String getLanguageCode()
     {
-        return Utils.getLanguageCode(Integer.parseInt(Utils.getUserData().get("lang")));
+        String lang = Utils.getUserData().get("lang");
+        String code = "en";
+        try
+        {
+            code = Utils.getLanguageCode(Integer.parseInt(lang));
+        }
+        catch (Exception e)
+        {
+
+        }
+        return code;
     }
 }

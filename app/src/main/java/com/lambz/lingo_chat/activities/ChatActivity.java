@@ -17,6 +17,8 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.TranslateOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -52,6 +54,7 @@ public class ChatActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private List<Message> mMessageList = new ArrayList<>();
     private MessageAdapter mMessageAdapter;
+    private Translate mTranslate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -80,13 +83,21 @@ public class ChatActivity extends AppCompatActivity
                 .setBlurAlgorithm(new RenderScriptBlur(this))
                 .setBlurRadius(radius)
                 .setHasFixedTransformationMatrix(true);
+
+        ((BlurView) findViewById(R.id.texts_blurview)).setupWith(rootView)
+                .setFrameClearDrawable(windowBackground)
+                .setBlurAlgorithm(new RenderScriptBlur(this))
+                .setBlurRadius(radius)
+                .setHasFixedTransformationMatrix(true);
     }
 
     private void setupRecyclerView()
     {
-        mMessageAdapter = new MessageAdapter(mMessageList, this);
+        mMessageAdapter = new MessageAdapter(mMessageList, this, mTranslate);
         mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setStackFromEnd(true);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerView.setAdapter(mMessageAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(mRecyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
     }
@@ -105,6 +116,7 @@ public class ChatActivity extends AppCompatActivity
         }
         mUserNameTextView.setText(mContact.getName());
         mRecyclerView = findViewById(R.id.recyclerview);
+        mTranslate = TranslateOptions.newBuilder().setApiKey(getString(R.string.google_translate_api_key)).build().getService();
     }
 
     public void backClicked(View view)
@@ -168,6 +180,7 @@ public class ChatActivity extends AppCompatActivity
             Message message = snapshot.getValue(Message.class);
             mMessageList.add(message);
             mMessageAdapter.setMessageList(mMessageList);
+            mRecyclerView.smoothScrollToPosition(mRecyclerView.getAdapter().getItemCount());
         }
 
         @Override

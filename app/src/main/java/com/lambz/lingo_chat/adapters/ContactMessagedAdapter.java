@@ -2,6 +2,8 @@ package com.lambz.lingo_chat.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.cloud.translate.Translate;
+import com.google.cloud.translate.Translation;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -19,6 +23,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.lambz.lingo_chat.R;
+import com.lambz.lingo_chat.Utils;
 import com.lambz.lingo_chat.activities.ChatActivity;
 import com.lambz.lingo_chat.activities.MainActivity;
 import com.lambz.lingo_chat.interfaces.ContactClickedInterface;
@@ -34,12 +39,14 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
     private List<Message> mMessageList;
     private Context mContext;
     private FirebaseUser mCurrentUser;
+    private Translate mTranslate;
 
-    public ContactMessagedAdapter(List<Message> contactList, Context context)
+    public ContactMessagedAdapter(List<Message> contactList, Context context, Translate translate)
     {
         this.mMessageList = contactList;
         this.mContext = context;
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        this.mTranslate = translate;
     }
 
     @NonNull
@@ -60,16 +67,20 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
         if (message.getType().equals("text"))
         {
             holder.mLastMessageTextView.setText(message.getText());
+            new Thread(() ->
+            {
+                Translation translation = mTranslate.translate(message.getText(), Translate.TranslateOption.targetLanguage(Utils.getLanguageCode()));
+                new Handler(Looper.getMainLooper()).post(() -> holder.mLastMessageTextView.setText(translation.getTranslatedText()));
+            }).start();
         } else
         {
             holder.mLastMessageTextView.setText(message.getType());
         }
         String uid;
-        if(message.getFrom().equals(mCurrentUser.getUid()))
+        if (message.getFrom().equals(mCurrentUser.getUid()))
         {
             uid = message.getTo();
-        }
-        else
+        } else
         {
             uid = message.getFrom();
         }
@@ -79,11 +90,16 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
             public void onDataChange(@NonNull DataSnapshot snapshot)
             {
                 users[0] = snapshot.getValue(Users.class);
-                if(!users[0].getImage().isEmpty())
+                if (!users[0].getImage().isEmpty())
                 {
                     Picasso.get().load(users[0].getImage()).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(holder.mProfileImageView);
                 }
                 holder.mUserNameTextView.setText(users[0].getFirst_name() + " " + users[0].getLast_name());
+                new Thread(() ->
+                {
+                    Translation translation = mTranslate.translate(users[0].getFirst_name() + " " + users[0].getLast_name(), Translate.TranslateOption.targetLanguage(Utils.getLanguageCode()));
+                    new Handler(Looper.getMainLooper()).post(() -> holder.mUserNameTextView.setText(translation.getTranslatedText()));
+                }).start();
             }
 
             @Override
@@ -94,7 +110,7 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
         });
         holder.mMainLayout.setOnClickListener(view ->
         {
-            Contact contact = new Contact(users[0].getFirst_name()+" "+users[0].getLast_name(), users[0].getImage(), uid);
+            Contact contact = new Contact(users[0].getFirst_name() + " " + users[0].getLast_name(), users[0].getImage(), uid);
             Intent intent = new Intent(mContext, ChatActivity.class);
             intent.putExtra("contact", contact);
             mContext.startActivity(intent);
