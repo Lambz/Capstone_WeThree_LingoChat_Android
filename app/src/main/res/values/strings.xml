@@ -62,5 +62,6 @@
         <item>español</item>
         <item>हिन्दी</item>
     </array>
+    <string name="title_activity_maps">Map</string>
 
 </resources>
