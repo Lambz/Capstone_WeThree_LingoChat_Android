@@ -11,6 +11,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -34,12 +35,14 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.lambz.lingo_chat.R;
+import com.lambz.lingo_chat.Utils;
 import com.lambz.lingo_chat.models.Contact;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import segmented_control.widget.custom.android.com.segmentedcontrol.SegmentedControl;
@@ -140,6 +143,14 @@ public class SettingsActivity extends AppCompatActivity
 
     private void changeAppLanguage(int lang)
     {
+        String languageToLoad  = Utils.getLanguageCode(lang);
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+        this.setContentView(R.layout.activity_settings);
     }
 
     ValueEventListener mValueEventListener = new ValueEventListener()

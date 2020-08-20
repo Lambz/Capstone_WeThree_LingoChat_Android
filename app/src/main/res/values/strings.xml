@@ -16,7 +16,7 @@
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="full_name">Full Name</string>
     <string name="facebook_app_id" translatable="false">222145562436782</string>
-    <string name="fb_login_protocol_scheme">fb222145562436782</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb222145562436782</string>
     <string name="chats">Chats</string>
     <string name="select_contact">Select Contact</string>
     <string name="cancel">cancel</string>
@@ -46,17 +46,16 @@
     <string name="delete_message">Delete Message?</string>
     <string name="view_image">View this Image</string>
     <string name="welcome_back">Welcome Back!</string>
-    <string name="user_name">User Name</string>
     <string name="last_message">Last message</string>
     <string name="let_s_get_started">Let\'s Get Started!</string>
     <string name="terms_conditions">By Signing Up you are accepting our terms and conditions</string>
 
     <array name="languages">
         <item>English</item>
-        <item>French</item>
-        <item>German</item>
-        <item>Spanish</item>
-        <item>Hindi</item>
+        <item>français</item>
+        <item>Deutsch</item>
+        <item>español</item>
+        <item>हिन्दी</item>
     </array>
 
 </resources>

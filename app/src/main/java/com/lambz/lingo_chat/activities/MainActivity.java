@@ -12,6 +12,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -45,6 +46,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
@@ -163,9 +165,7 @@ public class MainActivity extends AppCompatActivity
         mDatabaseReference.setValue(mUserInfo);
     }
 
-    private void changeAppLanguage(int languageSelection)
-    {
-    }
+
 
     private void addDisplayImage(Bitmap image)
     {
@@ -279,6 +279,7 @@ public class MainActivity extends AppCompatActivity
             }
             if (snapshot.exists() && snapshot.hasChild("lang") && !snapshot.child("lang").getValue().equals(""))
             {
+                changeAppLanguage(Integer.valueOf(String.valueOf(snapshot.child("lang").getValue())));
                 //Has
             } else
             {
@@ -330,4 +331,15 @@ public class MainActivity extends AppCompatActivity
             return lastElement;
         }
     };
+
+    private void changeAppLanguage(int lang)
+    {
+        String languageToLoad = Utils.getLanguageCode(lang);
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
+    }
 }
