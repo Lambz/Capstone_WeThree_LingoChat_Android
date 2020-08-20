@@ -1,3 +1,4 @@
 /build
 google_translate_key.xml
 google_maps_api.xml
+/src/debug/res/values/google_maps_api.xml

@@ -41,6 +41,7 @@ import com.lambz.lingo_chat.Utils;
 import com.lambz.lingo_chat.adapters.MessageAdapter;
 import com.lambz.lingo_chat.models.Contact;
 import com.lambz.lingo_chat.models.Message;
+import com.lambz.lingo_chat.models.UserLocation;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -408,7 +409,46 @@ public class ChatActivity extends AppCompatActivity
         }
         else if (requestCode == MAPS_REQUEST_CODE && resultCode == RESULT_OK)
         {
-
+            UserLocation location = (UserLocation) data.getSerializableExtra("location");
+            sendLocation(location);
         }
+    }
+
+    private void sendLocation(UserLocation location)
+    {
+        String messageSenderRef = "Messages/" + mCurrentUser.getUid() + "/" + mContact.getUid();
+        String messageReceiverRef = "Messages/" + mContact.getUid() + "/" + mCurrentUser.getUid();
+
+        DatabaseReference databaseReference = mDatabaseReference.child("Messages").child(mContact.getUid()).child(mCurrentUser.getUid()).push();
+
+        String message_key = databaseReference.getKey();
+
+        HashMap<String, String> message_data = new HashMap<>();
+        //        message_data.put("text", message);
+        message_data.put("type", "location");
+        message_data.put("from", mCurrentUser.getUid());
+        message_data.put("lang", Utils.getLanguageCode());
+        //        message_data.put("link", "");
+        message_data.put("to", mContact.getUid());
+        message_data.put("id",message_key);
+        message_data.put("lat", String.valueOf(location.getLat()));
+        message_data.put("lng", String.valueOf(location.getLat()));
+        message_data.put("locationtitle", location.getTitle());
+
+        Map message_body_details = new HashMap();
+        message_body_details.put(messageSenderRef + "/" + message_key, message_data);
+        message_body_details.put(messageReceiverRef + "/" + message_key, message_data);
+
+        mDatabaseReference.updateChildren(message_body_details).addOnCompleteListener(task ->
+        {
+            if (task.isSuccessful())
+            {
+                Log.v(TAG, "sendClicked: Message Pushed");
+            } else
+            {
+                Log.v(TAG, "sendClicked: Error");
+            }
+            mMessageEditText.setText("");
+        });
     }
 }
