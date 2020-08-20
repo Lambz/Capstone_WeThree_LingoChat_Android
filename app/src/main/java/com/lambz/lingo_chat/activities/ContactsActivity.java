@@ -228,7 +228,7 @@ public class ContactsActivity extends AppCompatActivity
                 //dispatchTakePictureIntent();
             } else
             {
-                Toast.makeText(this, "Contacts Permission is required to show contacts", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.contact_permission_toast, Toast.LENGTH_SHORT).show();
             }
         }
     }

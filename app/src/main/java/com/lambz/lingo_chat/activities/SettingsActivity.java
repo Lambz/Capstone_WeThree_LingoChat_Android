@@ -177,9 +177,9 @@ public class SettingsActivity extends AppCompatActivity
 
     public void imageClicked(View view)
     {
-        String[] arr = {"Camera", "Gallery"};
+        String[] arr = {getString(R.string.camera), getString(R.string.gallery)};
         AlertDialog.Builder dialog = new AlertDialog.Builder(SettingsActivity.this);
-        dialog.setTitle("Choose Image From: ");
+        dialog.setTitle(R.string.choose_image);
         dialog.setItems(arr, (dialog1, position) ->
         {
             if (position == 0)
@@ -226,7 +226,7 @@ public class SettingsActivity extends AppCompatActivity
                 //dispatchTakePictureIntent();
             } else
             {
-                Toast.makeText(this, "Camera is Required to Use Camera", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.camera_permission, Toast.LENGTH_SHORT).show();
             }
         }
     }

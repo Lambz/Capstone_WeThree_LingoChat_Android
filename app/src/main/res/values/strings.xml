@@ -35,6 +35,21 @@
     <string name="select_image">Select Image</string>
     <string name="select_pdf_file">Select Pdf file</string>
     <string name="select_word_file">Select MS Word File</string>
+    <string name="contact_permission_toast">Contacts Permission is required to show contacts</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="choose_image">\"Choose Image From: \"</string>
+    <string name="camera_permission">Camera is Required to Use Camera</string>
+    <string name="delete_for_me">Delete for me</string>
+    <string name="delete_for_all">Delete and for all</string>
+    <string name="download_view">Download and View this document</string>
+    <string name="delete_message">Delete Message?</string>
+    <string name="view_image">View this Image</string>
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="user_name">User Name</string>
+    <string name="last_message">Last message</string>
+    <string name="let_s_get_started">Let\'s Get Started!</string>
+    <string name="terms_conditions">By Signing Up you are accepting our terms and conditions</string>
 
     <array name="languages">
         <item>English</item>

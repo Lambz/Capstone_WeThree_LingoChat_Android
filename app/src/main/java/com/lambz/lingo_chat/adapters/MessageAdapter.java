@@ -132,13 +132,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 {
                     CharSequence options[] = new CharSequence[]
                             {
-                                    "Delete for me",
-                                    "Delete and for all",
-                                    "Download and View this document",
-                                    "Cancel"
+                                    mContext.getString(R.string.delete_for_me),
+                                    mContext.getString(R.string.delete_for_all),
+                                    mContext.getString(R.string.download_view),
+                                    mContext.getString(R.string.cancel)
                             };
                     AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
-                    builder.setTitle("Delete Message?");
+                    builder.setTitle(R.string.delete_message);
                     builder.setItems(options, (dialogInterface, i) ->
                     {
                         if(i==0)
@@ -161,12 +161,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 {
                     CharSequence options[] = new CharSequence[]
                             {
-                                    "Delete for me",
-                                    "Delete and for all",
-                                    "Cancel"
+                                    mContext.getString(R.string.delete_for_me),
+                                    mContext.getString(R.string.delete_for_all),
+                                    mContext.getString(R.string.cancel)
                             };
                     AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
-                    builder.setTitle("Delete Message?");
+                    builder.setTitle(R.string.delete_message);
                     builder.setItems(options, (dialogInterface, i) ->
                     {
                         if(i==0)
@@ -183,13 +183,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 {
                     CharSequence options[] = new CharSequence[]
                             {
-                                    "Delete for me",
-                                    "Delete and for all",
-                                    "View this Image",
-                                    "Cancel"
+                                    mContext.getString(R.string.delete_for_me),
+                                    mContext.getString(R.string.delete_for_all),
+                                    mContext.getString(R.string.view_image),
+                                    mContext.getString(R.string.cancel)
                             };
                     AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
-                    builder.setTitle("Delete Message?");
+                    builder.setTitle(R.string.delete_message);
                     builder.setItems(options, (dialogInterface, i) ->
                     {
                         if(i==0)
@@ -217,12 +217,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 {
                     CharSequence options[] = new CharSequence[]
                             {
-                                    "Delete for me",
-                                    "Download and View this document",
-                                    "Cancel"
+                                    mContext.getString(R.string.delete_for_me),
+                                    mContext.getString(R.string.download_view),
+                                    mContext.getString(R.string.cancel)
                             };
                     AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
-                    builder.setTitle("Delete Message?");
+                    builder.setTitle(R.string.delete_message);
                     builder.setItems(options, (dialogInterface, i) ->
                     {
                         if(i==0)
@@ -241,11 +241,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 {
                     CharSequence options[] = new CharSequence[]
                             {
-                                    "Delete for me",
-                                    "Cancel"
+                                    mContext.getString(R.string.delete_for_me),
+                                    mContext.getString(R.string.cancel)
                             };
                     AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
-                    builder.setTitle("Delete Message?");
+                    builder.setTitle(R.string.delete_message);
                     builder.setItems(options, (dialogInterface, i) ->
                     {
                         if(i==0)
@@ -258,12 +258,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 {
                     CharSequence options[] = new CharSequence[]
                             {
-                                    "Delete for me",
-                                    "View this Image",
-                                    "Cancel"
+                                    mContext.getString(R.string.delete_for_me),
+                                    mContext.getString(R.string.view_image),
+                                    mContext.getString(R.string.cancel)
                             };
                     AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
-                    builder.setTitle("Delete Message?");
+                    builder.setTitle(R.string.delete_message);
                     builder.setItems(options, (dialogInterface, i) ->
                     {
                         if(i==0)

@@ -122,19 +122,19 @@ public class LoginActivity extends AppCompatActivity
         String password = mPasswordEditText.getText().toString();
         if (email.isEmpty())
         {
-            mEmailEditText.setError("Email is required!");
+            mEmailEditText.setError(getString(R.string.email_required_error));
             mEmailEditText.requestFocus();
             shakeAndVibrate(mEmailEditText);
             return;
         } else if (!Utils.validate(email))
         {
-            mEmailEditText.setError("Enter valid email address!");
+            mEmailEditText.setError(getString(R.string.invalid_email_error));
             mEmailEditText.requestFocus();
             shakeAndVibrate(mEmailEditText);
             return;
         } else if (password.isEmpty())
         {
-            mPasswordEditText.setError("Password is required!");
+            mPasswordEditText.setError(getString(R.string.password_error));
             mPasswordEditText.requestFocus();
             shakeAndVibrate(mPasswordEditText);
             return;

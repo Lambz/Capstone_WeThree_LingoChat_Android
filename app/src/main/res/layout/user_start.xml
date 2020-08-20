@@ -12,7 +12,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Let's Get Started!"
+        android:text="@string/let_s_get_started"
         android:textColor="@color/blue"
         android:textSize="28sp" />
 
@@ -47,7 +47,7 @@
         android:paddingLeft="50dp"
         android:paddingRight="50dp"
         android:shadowColor="@color/dark_blue"
-        android:text="Save"
+        android:text="@string/save"
         android:textAllCaps="false"
         android:textColor="@android:color/white" />
 
