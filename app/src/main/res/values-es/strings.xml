@@ -46,5 +46,10 @@
     <string name="terms_conditions">Al registrarse, acepta nuestros t&#233;rminos y condiciones</string>
     <string name="last_message">Ultimo mensaje</string>
     <string name="let_s_get_started">&#161;Empecemos!</string>
+    <string name="images">Imagenes</string>
+    <string name="pdf_files">Archivos PDF</string>
+    <string name="ms_word_files">Archivos de MS Word</string>
+    <string name="select_the_file">Seleccione un archivo</string>
+    <string name="location">Ubicación</string>
 
 </resources>

@@ -243,9 +243,9 @@ public class ChatActivity extends AppCompatActivity
 
     public void sendFilesClicked(View view)
     {
-        CharSequence options [] = new CharSequence[]{"Images","PDF Files","Ms Word Files"};
+        CharSequence options [] = new CharSequence[]{getString(R.string.images),getString(R.string.pdf_files),getString(R.string.ms_word_files),getString(R.string.location)};
         AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
-        builder.setTitle("Select the File");
+        builder.setTitle(R.string.select_the_file);
         builder.setItems(options, (dialogInterface, i) ->
         {
             if (i == 0)

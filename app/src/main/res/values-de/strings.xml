@@ -46,5 +46,10 @@
     <string name="terms_conditions">Mit Ihrer Anmeldung akzeptieren Sie unsere Allgemeinen Gesch&#228;ftsbedingungen</string>
     <string name="last_message">Letzte Nachricht</string>
     <string name="let_s_get_started">Lass uns anfangen!</string>
+    <string name="images">Bilder</string>
+    <string name="pdf_files">PDF-Dateien</string>
+    <string name="ms_word_files">MS Word-Dateien</string>
+    <string name="select_the_file">Wählen Sie eine Datei aus</string>
+    <string name="location">Ort</string>
 
 </resources>

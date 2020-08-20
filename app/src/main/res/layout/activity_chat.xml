@@ -46,7 +46,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/send_files"
+                android:background="@mipmap/attachments"
                 android:onClick="sendFilesClicked"
                 android:backgroundTint="@color/textColor"
                 app:layout_constraintBottom_toBottomOf="parent"

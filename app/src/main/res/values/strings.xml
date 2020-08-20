@@ -49,6 +49,11 @@
     <string name="last_message">Last message</string>
     <string name="let_s_get_started">Let\'s Get Started!</string>
     <string name="terms_conditions">By Signing Up you are accepting our terms and conditions</string>
+    <string name="images">Images</string>
+    <string name="pdf_files">PDF Files</string>
+    <string name="ms_word_files">MS Word Files</string>
+    <string name="select_the_file">Select a File</string>
+    <string name="location">Location</string>
 
     <array name="languages">
         <item>English</item>
