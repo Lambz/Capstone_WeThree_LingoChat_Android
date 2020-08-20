@@ -87,6 +87,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             else
             {
                 holder.senderImageView.setVisibility(View.VISIBLE);
+                holder.senderImageView.setImageResource(R.drawable.file);
                 holder.senderTextView.setVisibility(View.GONE);
             }
         } else
@@ -111,6 +112,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             } else
             {
                 holder.receiverImageView.setVisibility(View.VISIBLE);
+                holder.receiverImageView.setImageResource(R.drawable.file);
                 holder.receiverTextView.setVisibility(View.GONE);
             }
         }
@@ -331,6 +333,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             if(task.isSuccessful())
             {
                 Toast.makeText(mContext, "Deleted Successfully.", Toast.LENGTH_SHORT).show();
+                mMessageList.remove(message);
+                this.notifyDataSetChanged();
             }
             else
             {
@@ -347,6 +351,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             if(task.isSuccessful())
             {
                 Toast.makeText(mContext, "Deleted Successfully.", Toast.LENGTH_SHORT).show();
+                mMessageList.remove(message);
+                this.notifyDataSetChanged();
             }
             else
             {
@@ -367,6 +373,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     if(task1.isSuccessful())
                     {
                         Toast.makeText(mContext, "Deleted Successfully.", Toast.LENGTH_SHORT).show();
+                        mMessageList.remove(message);
+                        this.notifyDataSetChanged();
                     }
                     else
                     {

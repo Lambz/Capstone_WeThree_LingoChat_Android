@@ -81,4 +81,9 @@ public class Utils
         }
         return code;
     }
+
+    public static String getIntLanguageCode()
+    {
+        return Utils.getUserData().get("lang");
+    }
 }

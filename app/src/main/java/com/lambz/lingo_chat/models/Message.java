@@ -100,4 +100,19 @@ public class Message
     {
         this.fileName = fileName;
     }
+
+    public boolean equals(Message message)
+    {
+        try
+        {
+            if(id.equals(message.getId()))
+            {
+                return true;
+            }
+        }
+        catch (Exception e)
+        {
+        }
+        return false;
+    }
 }

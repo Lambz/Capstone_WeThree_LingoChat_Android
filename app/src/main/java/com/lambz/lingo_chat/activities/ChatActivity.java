@@ -198,7 +198,20 @@ public class ChatActivity extends AppCompatActivity
         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName)
         {
             Message message = snapshot.getValue(Message.class);
-            mMessageList.add(message);
+            Log.v(TAG,"onChildAdded called");
+            boolean cond = true;
+            for(Message message1: mMessageList)
+            {
+                if(message1.equals(message))
+                {
+                    cond = false;
+                    break;
+                }
+            }
+            if(cond)
+            {
+                mMessageList.add(message);
+            }
             mMessageAdapter.setMessageList(mMessageList);
             mRecyclerView.smoothScrollToPosition(mRecyclerView.getAdapter().getItemCount());
         }
@@ -301,7 +314,7 @@ public class ChatActivity extends AppCompatActivity
                     message_data.put("text", "");
                     message_data.put("type", mFileType);
                     message_data.put("from", mCurrentUser.getUid());
-                    message_data.put("lang", Utils.getLanguageCode());
+                    message_data.put("lang", Utils.getIntLanguageCode());
                     message_data.put("link", mURL);
                     message_data.put("fileName", mFileUri.getLastPathSegment());
                     message_data.put("to", mContact.getUid());
@@ -353,7 +366,7 @@ public class ChatActivity extends AppCompatActivity
                         message_data.put("text", "");
                         message_data.put("type", mFileType);
                         message_data.put("from", mCurrentUser.getUid());
-                        message_data.put("lang", Utils.getLanguageCode());
+                        message_data.put("lang", Utils.getIntLanguageCode());
                         message_data.put("link", mURL);
                         message_data.put("fileName", mFileUri.getLastPathSegment());
                         message_data.put("to", mContact.getUid());
