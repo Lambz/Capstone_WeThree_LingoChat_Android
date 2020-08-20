@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +36,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import eightbitlab.com.blurview.BlurView;
+import eightbitlab.com.blurview.RenderScriptBlur;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+
 public class ChatActivity extends AppCompatActivity
 {
     private static final String TAG = "ChatActivity";
@@ -54,7 +60,26 @@ public class ChatActivity extends AppCompatActivity
         setContentView(R.layout.activity_chat);
         getSupportActionBar().hide();
         setMemberVariables();
-        setupRecyclerView();
+        setupRecyclerView();setupBlurView();
+    }
+
+    private void setupBlurView()
+    {
+        float radius = 20f;
+
+        View decorView = getWindow().getDecorView();
+        //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
+        ViewGroup rootView = (ViewGroup) decorView.findViewById(android.R.id.content);
+        //Set drawable to draw in the beginning of each blurred frame (Optional).
+        //Can be used in case your layout has a lot of transparent space and your content
+        //gets kinda lost after after blur is applied.
+        Drawable windowBackground = decorView.getBackground();
+
+        ((BlurView) findViewById(R.id.blurView)).setupWith(rootView)
+                .setFrameClearDrawable(windowBackground)
+                .setBlurAlgorithm(new RenderScriptBlur(this))
+                .setBlurRadius(radius)
+                .setHasFixedTransformationMatrix(true);
     }
 
     private void setupRecyclerView()
@@ -63,6 +88,7 @@ public class ChatActivity extends AppCompatActivity
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mMessageAdapter);
+        OverScrollDecoratorHelper.setUpOverScroll(mRecyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
     }
 
     private void setMemberVariables()
@@ -131,8 +157,6 @@ public class ChatActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        System.out.println("current user: "+mCurrentUser.getUid());
-        System.out.println("contact user: "+mContact.getUid());
         mDatabaseReference.child("Messages").child(mCurrentUser.getUid()).child(mContact.getUid()).addChildEventListener(mChildEventListener);
     }
 

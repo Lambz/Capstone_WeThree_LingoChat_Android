@@ -44,6 +44,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+
 public class MainActivity extends AppCompatActivity
 {
 
@@ -79,6 +81,7 @@ public class MainActivity extends AppCompatActivity
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mContactMessagedAdapter);
+        OverScrollDecoratorHelper.setUpOverScroll(mRecyclerView, OverScrollDecoratorHelper.ORIENTATION_VERTICAL);
     }
 
     private void setMemberVariables()
@@ -265,6 +268,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot)
         {
+            mMessageList = new ArrayList<>();
             for (DataSnapshot ds : snapshot.getChildren())
             {
                 mUserInfo.put(ds.getKey(), String.valueOf(ds.getValue()));
@@ -300,7 +304,6 @@ public class MainActivity extends AppCompatActivity
         {
             for (DataSnapshot ds : snapshot.getChildren())
             {
-                //                Message message = ds.getChildren().iterator().next().getValue(Message.class);
                 Message message = getLastElement(ds).getValue(Message.class);
                 mMessageList.add(message);
             }

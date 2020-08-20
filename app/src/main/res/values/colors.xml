@@ -8,4 +8,5 @@
     <color name="blue">#5ca1f5</color>
     <color name="text_color_2">#ffffff</color>
     <color name="background">#ffffff</color>
+    <color name="colorOverlay">#99ffffff</color>
 </resources>
