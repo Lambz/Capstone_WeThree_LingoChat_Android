@@ -140,11 +140,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     {
                         if(i==0)
                         {
-
+                            deleteSendMessages(message);
                         }
                         else if(i==1)
                         {
-
+                            deleteMessageForEveryone(message);
                         }
                         else if(i==2)
                         {
@@ -168,11 +168,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     {
                         if(i==0)
                         {
-
+                            deleteSendMessages(message);
                         }
                         else if(i==1)
                         {
-
+                            deleteMessageForEveryone(message);
                         }
                     });
                     builder.show();
@@ -191,11 +191,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     {
                         if(i==0)
                         {
-
+                            deleteSendMessages(message);
                         }
                         else if(i==1)
                         {
-
+                            deleteMessageForEveryone(message);
                         }
                         else if(i==2)
                         {
@@ -225,7 +225,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     {
                         if(i==0)
                         {
-
+                            deleteReceiveMessages(message);
                         }
                         else if(i==1)
                         {
@@ -248,7 +248,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     {
                         if(i==0)
                         {
-
+                            deleteReceiveMessages(message);
                         }
                     });
                     builder.show();
@@ -266,7 +266,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     {
                         if(i==0)
                         {
-
+                            deleteReceiveMessages(message);
                         }
                         else if(i==1)
                         {
@@ -323,7 +323,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         return px;
     }
 
-    private void deleteSendMessages(final Message message, final ViewHolder holder, final int position)
+    private void deleteSendMessages(final Message message)
     {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         rootRef.child("Messages").child(message.getFrom()).child(message.getTo()).child(message.getId()).removeValue().addOnCompleteListener(task ->
@@ -339,7 +339,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         });
     }
 
-    private void deleteReceiveMessages(final Message message, final ViewHolder holder, final int position)
+    private void deleteReceiveMessages(final Message message)
     {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         rootRef.child("Messages").child(message.getTo()).child(message.getFrom()).child(message.getId()).removeValue().addOnCompleteListener(task ->
@@ -355,7 +355,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         });
     }
 
-    private void deleteMessageForEveryone(final Message message, final ViewHolder holder, final int position)
+    private void deleteMessageForEveryone(final Message message)
     {
         DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         rootRef.child("Messages").child(message.getTo()).child(message.getFrom()).child(message.getId()).removeValue().addOnCompleteListener(task ->
