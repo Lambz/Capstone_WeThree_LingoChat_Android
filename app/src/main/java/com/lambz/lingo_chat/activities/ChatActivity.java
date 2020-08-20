@@ -275,6 +275,10 @@ public class ChatActivity extends AppCompatActivity
                 intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
                 startActivityForResult(intent.createChooser(intent,getString(R.string.select_word_file)), SELECT_FILE);
             }
+            else if(i == 3)
+            {
+                mFileType = "location";
+            }
         });
         builder.show();
     }
