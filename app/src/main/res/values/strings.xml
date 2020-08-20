@@ -54,7 +54,9 @@
     <string name="ms_word_files">MS Word Files</string>
     <string name="select_the_file">Select a File</string>
     <string name="location">Location</string>
+    <string name="title_activity_maps">Map</string>
     <string name="unknown">Unknown</string>
+    <string name="view_location">View Location</string>
 
     <array name="languages">
         <item>English</item>
@@ -63,6 +65,5 @@
         <item>español</item>
         <item>हिन्दी</item>
     </array>
-    <string name="title_activity_maps">Map</string>
 
 </resources>

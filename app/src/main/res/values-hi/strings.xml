@@ -51,5 +51,8 @@
     <string name="ms_word_files">एमएस वर्ड फाइलें</string>
     <string name="select_the_file">किसी फाइल का चयन करें</string>
     <string name="location">स्थान</string>
+    <string name="title_activity_maps">नक्शा</string>
+    <string name="unknown">अनजान</string>
+    <string name="view_location">स्थान देखें</string>
 
 </resources>

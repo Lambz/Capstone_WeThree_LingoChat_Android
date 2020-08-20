@@ -51,5 +51,8 @@
     <string name="ms_word_files">MS Word-Dateien</string>
     <string name="select_the_file">Wählen Sie eine Datei aus</string>
     <string name="location">Ort</string>
+    <string name="title_activity_maps">Karte</string>
+    <string name="unknown">Unbekannt</string>
+    <string name="view_location">Standort anzeigen</string>
 
 </resources>
