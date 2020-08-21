@@ -114,7 +114,15 @@ public class ContactsActivity extends AppCompatActivity
         @Override
         public boolean onQueryTextChange(String s)
         {
-            System.out.println(s);
+            ArrayList<Contact> contacts = new ArrayList<>();
+            for(Contact contact: mContactList)
+            {
+                if(contact.getName().contains(s))
+                {
+                    contacts.add(contact);
+                }
+            }
+            mContactListAdapter.setContactList(contacts);
             return false;
         }
     };
