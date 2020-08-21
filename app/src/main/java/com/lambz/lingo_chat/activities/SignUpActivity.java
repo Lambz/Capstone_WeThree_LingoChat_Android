@@ -113,7 +113,7 @@ public class SignUpActivity extends AppCompatActivity
             return;
         } else
         {
-            password = Utils.sha256(password);
+//            password = Utils.sha256(password);
             signUp(email, password, name);
         }
     }

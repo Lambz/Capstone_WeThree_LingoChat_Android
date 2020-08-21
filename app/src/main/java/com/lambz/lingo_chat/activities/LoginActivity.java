@@ -141,7 +141,7 @@ public class LoginActivity extends AppCompatActivity
             return;
         } else
         {
-            password = Utils.sha256(password);
+//            password = Utils.sha256(password);
             login(email, password);
         }
     }
