@@ -277,7 +277,7 @@ public class LoginActivity extends AppCompatActivity
                         Log.d(TAG, "signInWithCredential:success");
 //                            FirebaseUser user = mAuth.getCurrentUser();
                         String current_user_id = mAuth.getCurrentUser().getUid();
-                        mDatabaseReference.child("Users").child(current_user_id).setValue("");
+                        //mDatabaseReference.child("Users").child(current_user_id).setValue("");
                         getNameFromFacebook(token);
                         sendUserToMainActivity();
 //                            updateUI(user);
@@ -325,7 +325,7 @@ public class LoginActivity extends AppCompatActivity
         finish();
     }
 
-    private void addUserInfo(String name, String email, HashMap<String, String> profile_data)
+    private void addUserInfo(String name, String email, HashMap<String, Object> profile_data)
     {
         for(String key: profile_data.keySet())
         {
@@ -340,8 +340,6 @@ public class LoginActivity extends AppCompatActivity
         {
             profile_data.put("last_name","");
         }
-        profile_data.put("lang","");
-        profile_data.put("image","");
         profile_data.put("email", email);
         if(!profile_data.containsKey("lang"))
         {
@@ -351,7 +349,7 @@ public class LoginActivity extends AppCompatActivity
         {
             profile_data.put("image", "");
         }
-        mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).setValue(profile_data);
+        mDatabaseReference.child("Users").child(mAuth.getCurrentUser().getUid()).updateChildren(profile_data);
     }
 
     ValueEventListener mValueEventListener = new ValueEventListener()
@@ -365,7 +363,7 @@ public class LoginActivity extends AppCompatActivity
                 mDatabaseReference.child("Users").child(uid).setValue("");
             }
             snapshot = snapshot.child(uid);
-            HashMap<String, String> profile_data = new HashMap<>();
+            HashMap<String, Object> profile_data = new HashMap<>();
             for (DataSnapshot dataSnapshot : snapshot.getChildren())
             {
                 profile_data.put(dataSnapshot.getKey(), dataSnapshot.getValue().toString());

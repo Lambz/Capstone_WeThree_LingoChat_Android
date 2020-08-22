@@ -107,11 +107,11 @@ public class MainActivity extends AppCompatActivity
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = mAuth.getCurrentUser();
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getUid());
-        mDatabaseReference.addValueEventListener(mValueEventListener);
         mStorageReference = FirebaseStorage.getInstance().getReference().child("Profile Images");
         mUserInfo = new HashMap<>();
         mRecyclerView = findViewById(R.id.recyclerview);
         mTranslate = TranslateOptions.newBuilder().setApiKey(getString(R.string.google_translate_api_key)).build().getService();
+        mDatabaseReference.addValueEventListener(mValueEventListener);
     }
 
     @Override
@@ -290,10 +290,10 @@ public class MainActivity extends AppCompatActivity
             {
                 mUserInfo.put(ds.getKey(), String.valueOf(ds.getValue()));
             }
+            Log.v(TAG,snapshot.toString());
             if (snapshot.exists() && snapshot.hasChild("lang") && !snapshot.child("lang").getValue().equals(""))
             {
                 changeAppLanguage(Integer.valueOf(String.valueOf(snapshot.child("lang").getValue())));
-                //Has
             } else
             {
                 showGetStartedDialog();
