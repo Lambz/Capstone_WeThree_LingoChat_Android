@@ -25,6 +25,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -274,6 +275,7 @@ public class SettingsActivity extends AppCompatActivity
 
     public void signOutClicked(View view)
     {
+        LoginManager.getInstance().logOut();
         FirebaseAuth.getInstance().signOut();
         Intent intent = new Intent(this, StartupActivity.class);
         startActivity(intent);
