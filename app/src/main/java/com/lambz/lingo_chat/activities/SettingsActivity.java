@@ -14,14 +14,17 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -144,7 +147,7 @@ public class SettingsActivity extends AppCompatActivity
 
     private void changeAppLanguage(int lang)
     {
-        String languageToLoad  = Utils.getLanguageCode(lang);
+        String languageToLoad = Utils.getLanguageCode(lang);
         Locale locale = new Locale(languageToLoad);
         Locale.setDefault(locale);
         Configuration config = new Configuration();
@@ -164,17 +167,16 @@ public class SettingsActivity extends AppCompatActivity
                 mUserDataMap.put(ds.getKey(), String.valueOf(ds.getValue()));
             }
             String imgurl = (String) mUserDataMap.getOrDefault("image", null);
-            if(imgurl != null && !imgurl.isEmpty())
+            if (imgurl != null && !imgurl.isEmpty())
             {
                 Picasso.get().load(imgurl).error(R.mipmap.placeholder).placeholder(R.mipmap.placeholder).into(mCircleImageView);
             }
             mNameEditText.setText(mUserDataMap.get("first_name") + " " + mUserDataMap.get("last_name"));
-            String lang = (String) mUserDataMap.getOrDefault("lang","0");
-            if(lang.isEmpty())
+            String lang = (String) mUserDataMap.getOrDefault("lang", "0");
+            if (lang.isEmpty())
             {
                 mSegmentedControl.setSelectedSegment(0);
-            }
-            else
+            } else
             {
                 mSegmentedControl.setSelectedSegment(Integer.parseInt(lang));
             }
@@ -280,5 +282,26 @@ public class SettingsActivity extends AppCompatActivity
         Intent intent = new Intent(this, StartupActivity.class);
         startActivity(intent);
         finish();
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event)
+    {
+        if (event.getAction() == MotionEvent.ACTION_DOWN)
+        {
+            View v = getCurrentFocus();
+            if (v instanceof EditText)
+            {
+                Rect outRect = new Rect();
+                v.getGlobalVisibleRect(outRect);
+                if (!outRect.contains((int) event.getRawX(), (int) event.getRawY()))
+                {
+                    v.clearFocus();
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                }
+            }
+        }
+        return super.dispatchTouchEvent(event);
     }
 }

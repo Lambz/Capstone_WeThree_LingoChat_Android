@@ -101,11 +101,11 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
                     Picasso.get().load(users[0].getImage()).placeholder(R.mipmap.placeholder).error(R.mipmap.placeholder).into(holder.mProfileImageView);
                 }
                 holder.mUserNameTextView.setText(users[0].getFirst_name() + " " + users[0].getLast_name());
-                new Thread(() ->
-                {
-                    Translation translation = mTranslate.translate(users[0].getFirst_name() + " " + users[0].getLast_name(), Translate.TranslateOption.targetLanguage(Utils.getLanguageCode()));
-                    new Handler(Looper.getMainLooper()).post(() -> holder.mUserNameTextView.setText(translation.getTranslatedText()));
-                }).start();
+//                new Thread(() ->
+//                {
+//                    Translation translation = mTranslate.translate(users[0].getFirst_name() + " " + users[0].getLast_name(), Translate.TranslateOption.targetLanguage(Utils.getLanguageCode()));
+//                    new Handler(Looper.getMainLooper()).post(() -> holder.mUserNameTextView.setText(translation.getTranslatedText()));
+//                }).start();
             }
 
             @Override
