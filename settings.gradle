@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name = "LingoChat"
+rootProject.name = "Capstone_WeThree_LingoChat_Android"
