@@ -2,6 +2,7 @@ package com.lambz.lingo_chat.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.MediaController;
@@ -23,19 +24,18 @@ public class VideoActivity extends AppCompatActivity
         MediaController mediaController = new MediaController(this);
         mediaController.setAnchorView(mVideoView);
         mVideoView.setMediaController(mediaController);
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
         String url_string = getIntent().getStringExtra("url");
         mVideoView.setVideoPath(url_string);
         mVideoView.start();
     }
-
     public void backClicked(View view)
     {
         finish();
+    }
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
     }
 }
