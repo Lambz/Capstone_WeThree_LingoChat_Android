@@ -29,6 +29,7 @@ import com.lambz.lingo_chat.R;
 import com.lambz.lingo_chat.Utils;
 import com.lambz.lingo_chat.activities.ImageViewerActivity;
 import com.lambz.lingo_chat.activities.MapsActivity;
+import com.lambz.lingo_chat.activities.VideoActivity;
 import com.lambz.lingo_chat.models.Message;
 import com.lambz.lingo_chat.models.UserLocation;
 import com.squareup.picasso.Picasso;
@@ -91,6 +92,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 holder.senderImageView.setVisibility(View.VISIBLE);
                 holder.senderImageView.setImageResource(R.mipmap.location);
                 holder.senderTextView.setVisibility(View.GONE);
+            } else if (message.getType().equals("video"))
+            {
+                holder.senderImageView.setVisibility(View.VISIBLE);
+                holder.senderImageView.setImageResource(R.drawable.video);
+                holder.senderTextView.setVisibility(View.GONE);
             } else
             {
                 holder.senderImageView.setVisibility(View.VISIBLE);
@@ -120,6 +126,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             {
                 holder.receiverImageView.setVisibility(View.VISIBLE);
                 holder.receiverImageView.setImageResource(R.mipmap.location);
+                holder.receiverTextView.setVisibility(View.GONE);
+            } else if (message.getType().equals("video"))
+            {
+                holder.receiverImageView.setVisibility(View.VISIBLE);
+                holder.receiverImageView.setImageResource(R.drawable.video);
                 holder.receiverTextView.setVisibility(View.GONE);
             } else
             {
@@ -211,6 +222,31 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         }
                     });
                     builder.show();
+                } else if (message.getType().equals("video"))
+                {
+                    CharSequence options[] = new CharSequence[]
+                            {
+                                    mContext.getString(R.string.delete_for_me),
+                                    mContext.getString(R.string.delete_for_all),
+                                    mContext.getString(R.string.view_video),
+                                    mContext.getString(R.string.cancel)
+                            };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
+                    builder.setTitle(R.string.delete_message);
+                    builder.setItems(options, (dialogInterface, i) ->
+                    {
+                        if (i == 0)
+                        {
+                            deleteSendMessages(message);
+                        } else if (i == 1)
+                        {
+                            deleteMessageForEveryone(message);
+                        } else if (i == 2)
+                        {
+                            showVideo(message);
+                        }
+                    });
+                    builder.show();
                 } else
                 {
                     CharSequence options[] = new CharSequence[]
@@ -305,6 +341,27 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                         }
                     });
                     builder.show();
+                } else if (message.getType().equals("video"))
+                {
+                    CharSequence options[] = new CharSequence[]
+                            {
+                                    mContext.getString(R.string.delete_for_me),
+                                    mContext.getString(R.string.view_video),
+                                    mContext.getString(R.string.cancel)
+                            };
+                    AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
+                    builder.setTitle(R.string.delete_message);
+                    builder.setItems(options, (dialogInterface, i) ->
+                    {
+                        if (i == 0)
+                        {
+                            deleteReceiveMessages(message);
+                        } else if (i == 1)
+                        {
+                            showVideo(message);
+                        }
+                    });
+                    builder.show();
                 } else
                 {
                     CharSequence options[] = new CharSequence[]
@@ -332,6 +389,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 }
             });
         }
+    }
+
+    private void showVideo(Message message)
+    {
+        Intent intent = new Intent(mContext, VideoActivity.class);
+        intent.putExtra("url",message.getLink());
+        mContext.startActivity(intent);
     }
 
     @Override

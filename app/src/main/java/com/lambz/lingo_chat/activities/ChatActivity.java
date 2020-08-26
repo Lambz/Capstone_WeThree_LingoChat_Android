@@ -172,7 +172,7 @@ public class ChatActivity extends AppCompatActivity
         message_data.put("lang", Utils.getLanguageCode());
         message_data.put("link", "");
         message_data.put("to", mContact.getUid());
-        message_data.put("id",message_key);
+        message_data.put("id", message_key);
 
         Map message_body_details = new HashMap();
         message_body_details.put(messageSenderRef + "/" + message_key, message_data);
@@ -204,17 +204,17 @@ public class ChatActivity extends AppCompatActivity
         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName)
         {
             Message message = snapshot.getValue(Message.class);
-            Log.v(TAG,"onChildAdded called");
+            Log.v(TAG, "onChildAdded called");
             boolean cond = true;
-            for(Message message1: mMessageList)
+            for (Message message1 : mMessageList)
             {
-                if(message1.equals(message))
+                if (message1.equals(message))
                 {
                     cond = false;
                     break;
                 }
             }
-            if(cond)
+            if (cond)
             {
                 mMessageList.add(message);
             }
@@ -249,7 +249,7 @@ public class ChatActivity extends AppCompatActivity
 
     public void sendFilesClicked(View view)
     {
-        CharSequence options [] = new CharSequence[]{getString(R.string.images),getString(R.string.pdf_files),getString(R.string.ms_word_files),getString(R.string.location)};
+        CharSequence options[] = new CharSequence[]{getString(R.string.images), getString(R.string.pdf_files), getString(R.string.ms_word_files), getString(R.string.location), getString(R.string.video)};
         AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
         builder.setTitle(R.string.select_the_file);
         builder.setItems(options, (dialogInterface, i) ->
@@ -261,31 +261,37 @@ public class ChatActivity extends AppCompatActivity
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("image/*");
-                startActivityForResult(intent.createChooser(intent,getString(R.string.select_image)), SELECT_FILE);
-            }
-            else if(i == 1)
+                startActivityForResult(intent.createChooser(intent, getString(R.string.select_image)), SELECT_FILE);
+            } else if (i == 1)
             {
                 mFileType = "pdf";
 
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("application/pdf");
-                startActivityForResult(intent.createChooser(intent,getString(R.string.select_pdf_file)), SELECT_FILE);
-            }
-            else if(i == 2)
+                startActivityForResult(intent.createChooser(intent, getString(R.string.select_pdf_file)), SELECT_FILE);
+            } else if (i == 2)
             {
                 mFileType = "docx";
 
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 intent.setType("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-                startActivityForResult(intent.createChooser(intent,getString(R.string.select_word_file)), SELECT_FILE);
-            }
-            else if(i == 3)
+                startActivityForResult(intent.createChooser(intent, getString(R.string.select_word_file)), SELECT_FILE);
+            } else if (i == 3)
             {
                 mFileType = "location";
-                Intent intent = new Intent(ChatActivity.this,MapsActivity.class);
-                startActivityForResult(intent,MAPS_REQUEST_CODE);
+
+                Intent intent = new Intent(ChatActivity.this, MapsActivity.class);
+                startActivityForResult(intent, MAPS_REQUEST_CODE);
+            } else if (i == 4)
+            {
+                mFileType = "video";
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.setType("video/*");
+                startActivityForResult(intent.createChooser(intent, getString(R.string.select_image)), SELECT_FILE);
             }
         });
         builder.show();
@@ -295,11 +301,11 @@ public class ChatActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == SELECT_FILE && resultCode == RESULT_OK && data!= null && data.getData() != null)
+        if (requestCode == SELECT_FILE && resultCode == RESULT_OK && data != null && data.getData() != null)
         {
             mFileUri = data.getData();
 
-            if(!mFileType.equals("image"))
+            if (mFileType.equals("pdf") || mFileType.equals("docx"))
             {
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Documents");
                 String messageSenderRef = "Messages/" + mCurrentUser.getUid() + "/" + mContact.getUid();
@@ -308,13 +314,13 @@ public class ChatActivity extends AppCompatActivity
                 DatabaseReference databaseReference = mDatabaseReference.child("Messages").child(mContact.getUid()).child(mCurrentUser.getUid()).push();
 
                 String message_key = databaseReference.getKey();
-                StorageReference filePath = storageReference.child(message_key+"."+mFileType);
+                StorageReference filePath = storageReference.child(message_key + "." + mFileType);
 
                 filePath.putFile(mFileUri).continueWithTask((Continuation) task ->
                 {
-                    if(!task.isSuccessful())
+                    if (!task.isSuccessful())
                     {
-                        Log.v(TAG,"then: "+task.getException().getMessage());
+                        Log.v(TAG, "then: " + task.getException().getMessage());
                     }
                     return filePath.getDownloadUrl();
                 }).addOnCompleteListener((OnCompleteListener<Uri>) task ->
@@ -330,7 +336,7 @@ public class ChatActivity extends AppCompatActivity
                     message_data.put("link", mURL);
                     message_data.put("fileName", mFileUri.getLastPathSegment());
                     message_data.put("to", mContact.getUid());
-                    message_data.put("id",message_key);
+                    message_data.put("id", message_key);
 
                     Map message_body_details = new HashMap();
                     message_body_details.put(messageSenderRef + "/" + message_key, message_data);
@@ -348,8 +354,7 @@ public class ChatActivity extends AppCompatActivity
                         mMessageEditText.setText("");
                     });
                 });
-            }
-            else if(mFileType.equals("image"))
+            } else if (mFileType.equals("image"))
             {
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Images");
                 String messageSenderRef = "Messages/" + mCurrentUser.getUid() + "/" + mContact.getUid();
@@ -358,18 +363,18 @@ public class ChatActivity extends AppCompatActivity
                 DatabaseReference databaseReference = mDatabaseReference.child("Messages").child(mContact.getUid()).child(mCurrentUser.getUid()).push();
 
                 String message_key = databaseReference.getKey();
-                StorageReference filePath = storageReference.child(message_key+".jpg");
+                StorageReference filePath = storageReference.child(message_key + ".jpg");
                 mUploadTask = filePath.putFile(mFileUri);
                 mUploadTask.continueWithTask((Continuation) task ->
                 {
-                    if(!task.isSuccessful())
+                    if (!task.isSuccessful())
                     {
-                        Log.v(TAG,"then: "+task.getException().getMessage());
+                        Log.v(TAG, "then: " + task.getException().getMessage());
                     }
                     return filePath.getDownloadUrl();
                 }).addOnCompleteListener((OnCompleteListener<Uri>) task ->
                 {
-                    if(task.isSuccessful())
+                    if (task.isSuccessful())
                     {
                         Uri downloadUrl = task.getResult();
                         mURL = downloadUrl.toString();
@@ -382,7 +387,7 @@ public class ChatActivity extends AppCompatActivity
                         message_data.put("link", mURL);
                         message_data.put("fileName", mFileUri.getLastPathSegment());
                         message_data.put("to", mContact.getUid());
-                        message_data.put("id",message_key);
+                        message_data.put("id", message_key);
 
                         Map message_body_details = new HashMap();
                         message_body_details.put(messageSenderRef + "/" + message_key, message_data);
@@ -399,19 +404,71 @@ public class ChatActivity extends AppCompatActivity
                             }
                             mMessageEditText.setText("");
                         });
-                    }
-                    else
+                    } else
                     {
-                        Log.v(TAG,"onActivityResult addOnCompleteListener: "+task.getException().getMessage());
+                        Log.v(TAG, "onActivityResult addOnCompleteListener: " + task.getException().getMessage());
                     }
                 });
-            }
-            else
+            } else if (mFileType.equals("video"))
             {
-                Log.v(TAG,"onActivityResult: problem");
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Videos");
+                String messageSenderRef = "Messages/" + mCurrentUser.getUid() + "/" + mContact.getUid();
+                String messageReceiverRef = "Messages/" + mContact.getUid() + "/" + mCurrentUser.getUid();
+
+                DatabaseReference databaseReference = mDatabaseReference.child("Messages").child(mContact.getUid()).child(mCurrentUser.getUid()).push();
+
+                String message_key = databaseReference.getKey();
+                StorageReference filePath = storageReference.child(message_key + ".mp4");
+                mUploadTask = filePath.putFile(mFileUri);
+                mUploadTask.continueWithTask((Continuation) task ->
+                {
+                    if (!task.isSuccessful())
+                    {
+                        Log.v(TAG, "then: " + task.getException().getMessage());
+                    }
+                    return filePath.getDownloadUrl();
+                }).addOnCompleteListener((OnCompleteListener<Uri>) task ->
+                {
+                    if (task.isSuccessful())
+                    {
+                        Uri downloadUrl = task.getResult();
+                        mURL = downloadUrl.toString();
+
+                        HashMap<String, String> message_data = new HashMap<>();
+                        message_data.put("text", "");
+                        message_data.put("type", "video");
+                        message_data.put("from", mCurrentUser.getUid());
+                        message_data.put("lang", Utils.getIntLanguageCode());
+                        message_data.put("link", mURL);
+                        message_data.put("fileName", mFileUri.getLastPathSegment());
+                        message_data.put("to", mContact.getUid());
+                        message_data.put("id", message_key);
+
+                        Map message_body_details = new HashMap();
+                        message_body_details.put(messageSenderRef + "/" + message_key, message_data);
+                        message_body_details.put(messageReceiverRef + "/" + message_key, message_data);
+
+                        mDatabaseReference.updateChildren(message_body_details).addOnCompleteListener(task1 ->
+                        {
+                            if (task1.isSuccessful())
+                            {
+                                Log.v(TAG, "sendClicked: Message Pushed");
+                            } else
+                            {
+                                Log.v(TAG, "sendClicked: Error");
+                            }
+                            mMessageEditText.setText("");
+                        });
+                    } else
+                    {
+                        Log.v(TAG, "onActivityResult addOnCompleteListener: " + task.getException().getMessage());
+                    }
+                });
+            } else
+            {
+                Log.v(TAG, "onActivityResult: problem");
             }
-        }
-        else if (requestCode == MAPS_REQUEST_CODE && resultCode == RESULT_OK)
+        } else if (requestCode == MAPS_REQUEST_CODE && resultCode == RESULT_OK)
         {
             UserLocation location = (UserLocation) data.getSerializableExtra("location");
             sendLocation(location);
@@ -434,7 +491,7 @@ public class ChatActivity extends AppCompatActivity
         message_data.put("lang", Utils.getLanguageCode());
         //        message_data.put("link", "");
         message_data.put("to", mContact.getUid());
-        message_data.put("id",message_key);
+        message_data.put("id", message_key);
         message_data.put("lat", String.valueOf(location.getLat()));
         message_data.put("lng", String.valueOf(location.getLng()));
         message_data.put("locationtitle", location.getTitle());

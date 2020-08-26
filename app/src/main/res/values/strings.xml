@@ -57,6 +57,8 @@
     <string name="title_activity_maps">Map</string>
     <string name="unknown">Unknown</string>
     <string name="view_location">View Location</string>
+    <string name="video">Video</string>
+    <string name="view_video">View Video</string>
 
     <array name="languages">
         <item>English</item>
