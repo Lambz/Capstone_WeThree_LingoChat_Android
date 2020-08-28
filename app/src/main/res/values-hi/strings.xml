@@ -54,5 +54,12 @@
     <string name="title_activity_maps">नक्शा</string>
     <string name="unknown">अनजान</string>
     <string name="view_location">स्थान देखें</string>
+    <string name="video">वीडियो</string>
+    <string name="view_video">देखें वीडियो</string>
+    <string name="sent_image">प्रेषित चित्र</string>
+    <string name="logo">प्रतीक चिन्ह</string>
+    <string name="image_for_message">संदेश के लिए छवि</string>
+    <string name="deleted_successfully">सफलतापूर्वक मिटाया गया</string>
+    <string name="error_occurred_while_deleting">हटाते समय त्रुटि हुई</string>
 
 </resources>

@@ -10,7 +10,8 @@
         android:id="@+id/imageview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/placeholder_image" />
+        android:src="@mipmap/placeholder_image"
+        android:contentDescription="@string/sent_image"/>
 
     <eightbitlab.com.blurview.BlurView
         android:id="@+id/blurView"

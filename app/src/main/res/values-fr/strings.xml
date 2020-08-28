@@ -54,5 +54,12 @@
     <string name="title_activity_maps">Carte</string>
     <string name="unknown">Inconnue</string>
     <string name="view_location">Voir l\'emplacement</string>
+    <string name="video">Vidéo</string>
+    <string name="view_video">Voir la vidéo</string>
+    <string name="sent_image">Image envoyée</string>
+    <string name="logo">logo</string>
+    <string name="image_for_message">Image pour message</string>
+    <string name="deleted_successfully">Supprimé avec succès</string>
+    <string name="error_occurred_while_deleting">Une erreur s\'est produite lors de la suppression</string>
 
 </resources>

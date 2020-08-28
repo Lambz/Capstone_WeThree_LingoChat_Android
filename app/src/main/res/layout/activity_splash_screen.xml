@@ -20,7 +20,8 @@
         <ImageView
             android:layout_width="350dp"
             android:layout_height="250dp"
-            android:src="@mipmap/logo"/>
+            android:src="@mipmap/logo"
+            android:contentDescription="@string/logo"/>
 
         <TextView
             android:layout_width="wrap_content"

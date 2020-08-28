@@ -59,6 +59,11 @@
     <string name="view_location">View Location</string>
     <string name="video">Video</string>
     <string name="view_video">View Video</string>
+    <string name="sent_image">Sent Image</string>
+    <string name="logo">logo</string>
+    <string name="image_for_message">Image for message</string>
+    <string name="deleted_successfully">Deleted Successfully</string>
+    <string name="error_occurred_while_deleting">Error Occurred while deleting</string>
 
     <array name="languages">
         <item>English</item>

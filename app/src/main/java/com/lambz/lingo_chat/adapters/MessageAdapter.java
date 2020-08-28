@@ -448,12 +448,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         {
             if (task.isSuccessful())
             {
-                Toast.makeText(mContext, "Deleted Successfully.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.deleted_successfully, Toast.LENGTH_SHORT).show();
                 mMessageList.remove(message);
                 this.notifyDataSetChanged();
             } else
             {
-                Toast.makeText(mContext, "Error Occured while deleting", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.error_occurred_while_deleting, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -465,12 +465,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
         {
             if (task.isSuccessful())
             {
-                Toast.makeText(mContext, "Deleted Successfully.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.deleted_successfully, Toast.LENGTH_SHORT).show();
                 mMessageList.remove(message);
                 this.notifyDataSetChanged();
             } else
             {
-                Toast.makeText(mContext, "Error Occured while deleting", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext,  R.string.error_occurred_while_deleting, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -486,17 +486,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                 {
                     if (task1.isSuccessful())
                     {
-                        Toast.makeText(mContext, "Deleted Successfully.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.deleted_successfully, Toast.LENGTH_SHORT).show();
                         mMessageList.remove(message);
                         this.notifyDataSetChanged();
                     } else
                     {
-                        Toast.makeText(mContext, "Error Occured while deleting", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(mContext, R.string.error_occurred_while_deleting, Toast.LENGTH_SHORT).show();
                     }
                 });
             } else
             {
-                Toast.makeText(mContext, "Error Occured while deleting", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, R.string.error_occurred_while_deleting, Toast.LENGTH_SHORT).show();
             }
         });
     }
