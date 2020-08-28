@@ -117,12 +117,14 @@ public class SignUpActivity extends AppCompatActivity
         } else
         {
 //            password = Utils.sha256(password);
+            Log.v(TAG,"signUpClicked: email:"+email+" password:"+password+" name:"+name);
             signUp(email, password, name);
         }
     }
 
     private void signUp(String email, String password, final String name)
     {
+        Log.v(TAG,"signUpClicked: email:"+email+" password:"+password+" name:"+name);
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task ->
                 {
@@ -133,6 +135,7 @@ public class SignUpActivity extends AppCompatActivity
                         //FirebaseUser user = mAuth.getCurrentUser();
                         String current_user_id = mAuth.getCurrentUser().getUid();
                         mDatabaseReference.child("Users").child(current_user_id).setValue("");
+                        Log.v(TAG,"signUp: email:"+email+" password:"+password+" name:"+name);
                         addName(task.getResult().getUser(), name,email);
                         sendUserToMainActivity();
                         //updateUI(user);
@@ -170,6 +173,8 @@ public class SignUpActivity extends AppCompatActivity
                         Log.d(TAG, "User profile updated.");
                     }
                 });
+
+        Log.v(TAG,"addName: email:"+email+" name:"+name);
         addUserInfo(name,email);
     }
 
@@ -181,6 +186,7 @@ public class SignUpActivity extends AppCompatActivity
 
     private void addUserInfo(String name, String email)
     {
+        Log.v(TAG,"addUserInfo: email:"+email+" name:"+name);
         HashMap<String, String > profile_data = new HashMap<String,String>();
         String strs [] = name.split(" ");
         profile_data.put("first_name",strs[0]);
