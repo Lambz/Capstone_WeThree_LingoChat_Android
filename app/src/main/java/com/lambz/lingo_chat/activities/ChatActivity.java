@@ -168,7 +168,7 @@ public class ChatActivity extends AppCompatActivity
         message_data.put("text", message);
         message_data.put("type", "text");
         message_data.put("from", mCurrentUser.getUid());
-        message_data.put("lang", Utils.getLanguageCode());
+        message_data.put("lang", Utils.getIntLanguageCode());
         message_data.put("link", "");
         message_data.put("to", mContact.getUid());
         message_data.put("id", message_key);
@@ -487,7 +487,7 @@ public class ChatActivity extends AppCompatActivity
         //        message_data.put("text", message);
         message_data.put("type", "location");
         message_data.put("from", mCurrentUser.getUid());
-        message_data.put("lang", Utils.getLanguageCode());
+        message_data.put("lang", Utils.getIntLanguageCode());
         //        message_data.put("link", "");
         message_data.put("to", mContact.getUid());
         message_data.put("id", message_key);
