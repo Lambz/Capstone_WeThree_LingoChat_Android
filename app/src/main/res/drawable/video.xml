@@ -6,7 +6,7 @@
         android:right="10dp"
         android:top="10dp">
 
-        <selector xmlns:android="http://schemas.android.com/apk/res/android">
+        <selector>
            <item android:drawable="@mipmap/video"/>
         </selector>
     </item>

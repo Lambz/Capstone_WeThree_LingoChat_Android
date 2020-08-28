@@ -169,7 +169,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    GoogleMap.OnMapClickListener mOnMapClickListener = latLng -> addMarker(latLng);
+    GoogleMap.OnMapClickListener mOnMapClickListener = this::addMarker;
 
     public void saveClicked(View view)
     {
@@ -222,9 +222,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 if (!title.isEmpty())
                 {
                     MapsActivity.this.runOnUiThread(() ->
-                    {
-                        setInfo(title, mMarker);
-                    });
+                            setInfo(title, mMarker));
                 } else
                 {
                     MapsActivity.this.runOnUiThread(() -> setInfo(getString(R.string.unknown), mMarker));

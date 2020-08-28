@@ -37,8 +37,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.user_display_layout, parent, false);
-        ViewHolder viewHolder = new ViewHolder(listItem);
-        return viewHolder;
+        return new ViewHolder(listItem);
     }
 
     @Override

@@ -25,8 +25,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.lambz.lingo_chat.R;
 import com.lambz.lingo_chat.Utils;
 import com.lambz.lingo_chat.activities.ChatActivity;
-import com.lambz.lingo_chat.activities.MainActivity;
-import com.lambz.lingo_chat.interfaces.ContactClickedInterface;
 import com.lambz.lingo_chat.models.Contact;
 import com.lambz.lingo_chat.models.Message;
 import com.lambz.lingo_chat.models.Users;
@@ -56,8 +54,7 @@ public class ContactMessagedAdapter extends RecyclerView.Adapter<ContactMessaged
     {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.contact_messaged_layout, parent, false);
-        ViewHolder viewHolder = new ViewHolder(listItem);
-        return viewHolder;
+        return new ViewHolder(listItem);
     }
 
     @Override

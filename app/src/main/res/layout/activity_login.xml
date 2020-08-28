@@ -45,7 +45,8 @@
                 android:drawableStart="@mipmap/userb"
                 android:drawablePadding="5dp"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:autofillHints="@string/email"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -63,7 +64,8 @@
                 android:drawableStart="@mipmap/lock"
                 android:drawablePadding="5dp"
                 android:hint="@string/password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:autofillHints="@string/password"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button

@@ -2,7 +2,6 @@ package com.lambz.lingo_chat;
 
 import android.location.Address;
 
-import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,7 +78,7 @@ public class Utils
         }
         catch (Exception e)
         {
-
+            e.printStackTrace();
         }
         return code;
     }

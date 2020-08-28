@@ -61,5 +61,6 @@
     <string name="image_for_message">Image pour message</string>
     <string name="deleted_successfully">Supprimé avec succès</string>
     <string name="error_occurred_while_deleting">Une erreur s\'est produite lors de la suppression</string>
+    <string name="search">Chercher</string>
 
 </resources>

@@ -61,5 +61,6 @@
     <string name="image_for_message">Bild für Nachricht</string>
     <string name="deleted_successfully">Erfolgreich gelöscht</string>
     <string name="error_occurred_while_deleting">Beim Löschen ist ein Fehler aufgetreten</string>
+    <string name="search">Suche</string>
 
 </resources>

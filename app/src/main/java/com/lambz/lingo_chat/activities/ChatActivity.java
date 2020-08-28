@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
 import com.google.cloud.translate.Translation;
@@ -249,7 +248,7 @@ public class ChatActivity extends AppCompatActivity
 
     public void sendFilesClicked(View view)
     {
-        CharSequence options[] = new CharSequence[]{getString(R.string.images), getString(R.string.pdf_files), getString(R.string.ms_word_files), getString(R.string.location), getString(R.string.video)};
+        CharSequence[] options = new CharSequence[]{getString(R.string.images), getString(R.string.pdf_files), getString(R.string.ms_word_files), getString(R.string.location), getString(R.string.video)};
         AlertDialog.Builder builder = new AlertDialog.Builder(ChatActivity.this);
         builder.setTitle(R.string.select_the_file);
         builder.setItems(options, (dialogInterface, i) ->

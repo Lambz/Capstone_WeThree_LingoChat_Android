@@ -40,9 +40,6 @@ import com.lambz.lingo_chat.models.Contact;
 import com.lambz.lingo_chat.R;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 public class ContactsActivity extends AppCompatActivity
 {
@@ -216,6 +213,7 @@ public class ContactsActivity extends AppCompatActivity
                 cur1.close();
             }
         }
+        cur.close();
         return emails;
     }
 

@@ -60,8 +60,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.custom_message_layout, parent, false);
-        ViewHolder viewHolder = new ViewHolder(listItem);
-        return viewHolder;
+        return new ViewHolder(listItem);
     }
 
     @Override
@@ -152,7 +151,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             {
                 if (message.getType().equals("pdf") || message.getType().equals("docx"))
                 {
-                    CharSequence options[] = new CharSequence[]
+                    CharSequence[] options = new CharSequence[]
                             {
                                     mContext.getString(R.string.delete_for_me),
                                     mContext.getString(R.string.delete_for_all),
@@ -178,7 +177,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     builder.show();
                 } else if (message.getType().equals("text"))
                 {
-                    CharSequence options[] = new CharSequence[]
+                    CharSequence[] options = new CharSequence[]
                             {
                                     mContext.getString(R.string.delete_for_me),
                                     mContext.getString(R.string.delete_for_all),
@@ -199,7 +198,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     builder.show();
                 } else if (message.getType().equals("image"))
                 {
-                    CharSequence options[] = new CharSequence[]
+                    CharSequence[] options = new CharSequence[]
                             {
                                     mContext.getString(R.string.delete_for_me),
                                     mContext.getString(R.string.delete_for_all),
@@ -224,7 +223,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     builder.show();
                 } else if (message.getType().equals("video"))
                 {
-                    CharSequence options[] = new CharSequence[]
+                    CharSequence[] options = new CharSequence[]
                             {
                                     mContext.getString(R.string.delete_for_me),
                                     mContext.getString(R.string.delete_for_all),
@@ -249,7 +248,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     builder.show();
                 } else
                 {
-                    CharSequence options[] = new CharSequence[]
+                    CharSequence[] options = new CharSequence[]
                             {
                                     mContext.getString(R.string.delete_for_me),
                                     mContext.getString(R.string.delete_for_all),
@@ -268,7 +267,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                             deleteMessageForEveryone(message);
                         } else if (i == 2)
                         {
-                            UserLocation userLocation = new UserLocation(Double.valueOf(message.getLat()), Double.valueOf(message.getLng()), message.getLocationtitle());
+                            UserLocation userLocation = new UserLocation(Double.parseDouble(message.getLat()), Double.parseDouble(message.getLng()), message.getLocationtitle());
                             Intent intent = new Intent(mContext, MapsActivity.class);
                             intent.putExtra("location", userLocation);
                             mContext.startActivity(intent);
@@ -283,7 +282,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             {
                 if (message.getType().equals("pdf") || message.getType().equals("docx"))
                 {
-                    CharSequence options[] = new CharSequence[]
+                    CharSequence[] options = new CharSequence[]
                             {
                                     mContext.getString(R.string.delete_for_me),
                                     mContext.getString(R.string.download_view),
@@ -305,7 +304,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     builder.show();
                 } else if (message.getType().equals("text"))
                 {
-                    CharSequence options[] = new CharSequence[]
+                    CharSequence[] options = new CharSequence[]
                             {
                                     mContext.getString(R.string.delete_for_me),
                                     mContext.getString(R.string.cancel)
@@ -322,7 +321,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     builder.show();
                 } else if (message.getType().equals("image"))
                 {
-                    CharSequence options[] = new CharSequence[]
+                    CharSequence[] options = new CharSequence[]
                             {
                                     mContext.getString(R.string.delete_for_me),
                                     mContext.getString(R.string.view_image),
@@ -343,7 +342,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     builder.show();
                 } else if (message.getType().equals("video"))
                 {
-                    CharSequence options[] = new CharSequence[]
+                    CharSequence[] options = new CharSequence[]
                             {
                                     mContext.getString(R.string.delete_for_me),
                                     mContext.getString(R.string.view_video),
@@ -364,7 +363,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                     builder.show();
                 } else
                 {
-                    CharSequence options[] = new CharSequence[]
+                    CharSequence[] options = new CharSequence[]
                             {
                                     mContext.getString(R.string.delete_for_me),
                                     mContext.getString(R.string.view_location),
@@ -379,7 +378,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
                             deleteSendMessages(message);
                         } else if (i == 1)
                         {
-                            UserLocation userLocation = new UserLocation(Double.valueOf(message.getLat()), Double.valueOf(message.getLng()), message.getLocationtitle());
+                            UserLocation userLocation = new UserLocation(Double.parseDouble(message.getLat()), Double.parseDouble(message.getLng()), message.getLocationtitle());
                             Intent intent = new Intent(mContext, MapsActivity.class);
                             intent.putExtra("location", userLocation);
                             mContext.startActivity(intent);
@@ -433,12 +432,11 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private int getPx(int dp)
     {
         Resources r = mContext.getResources();
-        int px = (int) TypedValue.applyDimension(
+        return (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 dp,
                 r.getDisplayMetrics()
         );
-        return px;
     }
 
     private void deleteSendMessages(final Message message)

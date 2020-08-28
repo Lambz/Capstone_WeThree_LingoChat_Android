@@ -19,7 +19,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -40,7 +39,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.lambz.lingo_chat.R;
 import com.lambz.lingo_chat.Utils;
-import com.lambz.lingo_chat.models.Contact;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -101,7 +99,7 @@ public class SettingsActivity extends AppCompatActivity
             shakeAndVibrate(mNameEditText);
             return;
         }
-        String strs[] = name.split(" ");
+        String[] strs = name.split(" ");
         mUserDataMap.put("first_name", strs[0]);
         if (strs.length > 1)
         {
@@ -253,8 +251,7 @@ public class SettingsActivity extends AppCompatActivity
         {
             if (resultCode == RESULT_OK)
             {
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                mSelectedImage = bitmap;
+                mSelectedImage = (Bitmap) data.getExtras().get("data");
                 mCircleImageView.setImageBitmap(mSelectedImage);
             }
         } else if (requestCode == GALLERY_REQUEST_CODE)
@@ -262,8 +259,7 @@ public class SettingsActivity extends AppCompatActivity
             if (resultCode == RESULT_OK && data != null && data.getData() != null)
             {
                 File file = ImagePicker.Companion.getFile(data);
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                mSelectedImage = bitmap;
+                mSelectedImage = BitmapFactory.decodeFile(file.getAbsolutePath());
                 mCircleImageView.setImageBitmap(mSelectedImage);
             }
         }

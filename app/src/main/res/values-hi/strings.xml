@@ -61,5 +61,6 @@
     <string name="image_for_message">संदेश के लिए छवि</string>
     <string name="deleted_successfully">सफलतापूर्वक मिटाया गया</string>
     <string name="error_occurred_while_deleting">हटाते समय त्रुटि हुई</string>
+    <string name="search">खोज</string>
 
 </resources>

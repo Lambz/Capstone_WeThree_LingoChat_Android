@@ -27,8 +27,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.github.dhaval2404.imagepicker.ImagePicker;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.cloud.translate.Translate;
 import com.google.cloud.translate.TranslateOptions;
@@ -58,7 +56,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
-import okhttp3.internal.Util;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -245,8 +242,7 @@ public class MainActivity extends AppCompatActivity
         {
             if (resultCode == RESULT_OK)
             {
-                Bitmap bitmap = (Bitmap) data.getExtras().get("data");
-                mSelectedImage = bitmap;
+                mSelectedImage = (Bitmap) data.getExtras().get("data");
                 mDialog.setImageBitmap(mSelectedImage);
             }
         } else if (requestCode == GALLERY_REQUEST_CODE)
@@ -254,8 +250,7 @@ public class MainActivity extends AppCompatActivity
             if (resultCode == RESULT_OK && data != null && data.getData() != null)
             {
                 File file = ImagePicker.Companion.getFile(data);
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                mSelectedImage = bitmap;
+                mSelectedImage = BitmapFactory.decodeFile(file.getAbsolutePath());
                 mDialog.setImageBitmap(mSelectedImage);
             }
         } else if (requestCode == NEW_MESSAGE_REQUEST_CODE)
@@ -293,7 +288,7 @@ public class MainActivity extends AppCompatActivity
             Log.v(TAG,snapshot.toString());
             if (snapshot.exists() && snapshot.hasChild("lang") && !snapshot.child("lang").getValue().equals(""))
             {
-                changeAppLanguage(Integer.valueOf(String.valueOf(snapshot.child("lang").getValue())));
+                changeAppLanguage(Integer.parseInt(String.valueOf(snapshot.child("lang").getValue())));
             } else
             {
                 showGetStartedDialog();

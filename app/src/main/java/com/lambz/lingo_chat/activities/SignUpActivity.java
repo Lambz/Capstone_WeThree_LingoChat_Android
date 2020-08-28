@@ -187,8 +187,8 @@ public class SignUpActivity extends AppCompatActivity
     private void addUserInfo(String name, String email)
     {
         Log.v(TAG,"addUserInfo: email:"+email+" name:"+name);
-        HashMap<String, String > profile_data = new HashMap<String,String>();
-        String strs [] = name.split(" ");
+        HashMap<String, String > profile_data = new HashMap<>();
+        String[] strs = name.split(" ");
         profile_data.put("first_name",strs[0]);
         if(strs.length>1)
         {
