@@ -1,4 +1,7 @@
 # LingoChat - Android
+iOS Version: [link](https://github.com/Lambz/Capstone_WeThree_LingoChat_iOS)
+<br/>Website Version: [link](https://github.com/Lambz/Capstone_WeThree_LingoChat-Web)
+<br/>
 In today’s life, we interact with so many people on daily basis. Communication is a key part in everyone’s life but what happens when you two people don’t speak the same language.
 <br/>This project aims to create an instant messaging app. The major feature of the application is that the user will be able to chat in their native language and the incoming message from the other user will automatically be converted into their native language.
 
